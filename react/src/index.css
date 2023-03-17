@@ -1,0 +1,50 @@
+/* body * {
+  border: 1px solid black;
+} */
+
+body {
+  /* Default margin is 8px - get rid of it */
+  margin: 0;
+}
+
+/* Style the title-bar class to be grey
+and horizontal across the top of the page */
+.title-bar {
+  background-color: #333;
+  color: white;
+  padding: 15px;
+  /* margin: 10px; */
+  /* text-align: center; */
+  font-family: sans-serif;
+  border: 0px 0px 0px 0px;
+  /* border: 0px; */
+}
+
+/* Put some padding between the title-bar
+and the page-body */
+.page-body {
+  /* padding-top: 20px; */
+  /* border: 5px solid black; */
+  /* set the margin to 20px orange */
+  margin: 20px;
+  /* make the margin orange */
+  /* padding 20px */
+  padding: 20px;
+  /* set the border width to 20px */
+  /* border-width: 20px; */
+  /* border: 20px; */
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 10px;
+  max-width: 200px;
+  margin: 0 auto; /* center the container horizontally */
+}
+
+/* TODO: Ask why we need this */
+.grid-container img {
+  width: 100%;
+  height: auto;
+}
