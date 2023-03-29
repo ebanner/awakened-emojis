@@ -18,8 +18,7 @@ class Grid extends React.Component {
     }
   
     componentDidMount() {
-      var data = require('./just-custom-emojis-and-popularity.json');
-      data = data.slice(0, 66-1);
+      const data = require('./just-custom-emojis-and-popularity.json');
   
       // Set data to the state
       this.setState({ data: data });
@@ -29,12 +28,16 @@ class Grid extends React.Component {
       if (! this.state.data) {
         return null;
       }
+
+      // Take the first slice of the data based on percentageOfEmojisToShow
+      const numEmojisToShow = Math.floor(this.state.data.length * this.props.percentageOfEmojisToShow);
+      var dataToShow = this.state.data.slice(0, numEmojisToShow);
   
       return (
         <div
           class="grid-container"
         >
-          {this.state.data.map((item, index) => (
+          {dataToShow.map((item, index) => (
             <Link to={`/emoji/${item.emoji_name}`}>
               <img
                 src={item.emoji_url}
@@ -56,9 +59,11 @@ class Grid extends React.Component {
       this.onMouseOver = this.onMouseOver.bind(this)
       this.onMouseOut = this.onMouseOut.bind(this)
       this.onMouseMove = this.onMouseMove.bind(this)
+      this.handleButtonClick = this.handleButtonClick.bind(this)
   
       this.state = {
         emojiName: null,
+        percentageOfEmojisToShow: 0.1,
         toolTipStyle: {
           position: "fixed",
           top: null,
@@ -72,7 +77,15 @@ class Grid extends React.Component {
         }
       }
     }
-  
+
+    handleButtonClick() {
+      const newPercentageOfEmojisToShow = this.state.percentageOfEmojisToShow + 0.1;
+
+      this.setState({
+        percentageOfEmojisToShow: newPercentageOfEmojisToShow
+      });
+    }
+
     onMouseOver(emojiName) {
       this.setState({ emojiName: emojiName});
     }
@@ -109,9 +122,10 @@ class Grid extends React.Component {
               onMouseOver={this.onMouseOver}
               onMouseOut={this.onMouseOut}
               onMouseMove={this.onMouseMove}
+              percentageOfEmojisToShow={this.state.percentageOfEmojisToShow}
             />
             <div class="button-container">
-              <button class="button">More</button>
+              <button onClick={this.handleButtonClick}>More</button>
             </div>
           </div>
           {this.state.emojiName &&
