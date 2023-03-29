@@ -110,6 +110,9 @@ class Grid extends React.Component {
               onMouseOut={this.onMouseOut}
               onMouseMove={this.onMouseMove}
             />
+            <div class="button-container">
+              <button class="button">More</button>
+            </div>
           </div>
           {this.state.emojiName &&
             <div

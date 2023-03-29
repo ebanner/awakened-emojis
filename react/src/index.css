@@ -7,6 +7,14 @@ body {
   margin: 0;
 }
 
+.button-container {
+  /* Right align the button */
+  text-align: center;
+  
+  /* Put some space between the emojis and the button */
+  padding-top: 20px;
+}
+
 /* Style the title-bar class to be grey
 and horizontal across the top of the page */
 .title-bar {
