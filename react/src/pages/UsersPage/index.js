@@ -34,7 +34,7 @@ class UsersPage extends React.Component {
     const numEmojisToShow = {};
     for (var key in data) {
       // data[key] = data[key].slice(0, 5);
-      numEmojisToShow[key] = 5;
+      numEmojisToShow[key] = 7;
     }
 
     this.setState({
@@ -65,7 +65,7 @@ class UsersPage extends React.Component {
                     </Link>
                   ))}
                   <span style={{paddingLeft: "10px"}}>
-                    <button onClick={() => this.handleClick(user)}>More</button>
+                    <button onClick={() => this.handleClick(user)}>...</button>
                   </span>
                 </>
             ))}
