@@ -64,9 +64,13 @@ class UsersPage extends React.Component {
                       />
                     </Link>
                   ))}
-                  <span style={{paddingLeft: "10px"}}>
-                    <button onClick={() => this.handleClick(user)}>...</button>
-                  </span>
+                  {
+                    /* Only show the button if there are more emojis left to show */
+                    this.state.data[user].length > this.state.numEmojisToShow[user] &&
+                      <span style={{paddingLeft: "10px"}}>
+                        <button onClick={() => this.handleClick(user)}>...</button>
+                      </span>
+                  }
                 </>
             ))}
           {/* <h1>Users</h1>
