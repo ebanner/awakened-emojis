@@ -101,3 +101,91 @@ def get_emoji_counts_for_all_channels():
                 total_emoji_counts[emoji] = count
 
     return total_emoji_counts
+
+def get_channel_user_emoji_counts():
+    # Get all channels
+    all_channels = get_channels()
+
+    ### Get `(channel, user, emoji)` counts for messages
+
+    # Compute (user, emoji) counts for each channel
+    message_user_emoji_counts = {}
+    for channel in tqdm(all_channels, desc='messages', unit='channel'):
+        for emoji_file in get_emoji_files(channel):
+            messages = get_messages(emoji_file)
+            for message in messages:
+                user = message['user']
+                emojis = get_emojis_from_message(message)
+                for emoji in emojis:
+                    key = (channel, user, emoji)
+                    if key not in message_user_emoji_counts:
+                        message_user_emoji_counts[key] = 1
+                    else:
+                        message_user_emoji_counts[key] += 1
+
+
+    ### Get `(channel, user, emoji)` counts for reactions
+
+    # Get all reactions from all channels
+    channel_to_reactions = {}
+    all_channels = get_channels()
+    for channel in tqdm(all_channels, desc='reactions', unit='channel'):
+        emoji_files = get_emoji_files(channel)
+        for emoji_file in emoji_files:
+            messages = get_messages(emoji_file)
+            for message in messages:
+                reactions = get_reactions(message)
+                # Add reactions to channel_to_reactions
+                if channel not in channel_to_reactions:
+                    channel_to_reactions[channel] = reactions
+                else:
+                    channel_to_reactions[channel].extend(reactions)
+
+    # Create (channel, user, emoji) counts from channel_to_reactions
+    reactions_user_emoji_counts = {}
+    for channel, reactions in channel_to_reactions.items():
+        for reaction in reactions:
+            for user in reaction['users']:
+                emoji = reaction['name']
+                key = (channel, user, emoji)
+                if key not in reactions_user_emoji_counts:
+                    reactions_user_emoji_counts[key] = 1
+                else:
+                    reactions_user_emoji_counts[key] += 1
+
+    ### Combine the counts from `message_user_emoji_counts` and `reactions_user_emoji_counts` together
+    all_user_emoji_counts = {}
+    for key, count in message_user_emoji_counts.items():
+        if key not in all_user_emoji_counts:
+            all_user_emoji_counts[key] = count
+        else:
+            all_user_emoji_counts[key] += count
+            
+    for key, count in reactions_user_emoji_counts.items():
+        if key not in all_user_emoji_counts:
+            all_user_emoji_counts[key] = count
+        else:
+            all_user_emoji_counts[key] += count
+
+    # Make user_emjoi_counts into a list of tuples
+    user_emoji_counts_list = []
+    for key, count in all_user_emoji_counts.items():
+        user_emoji_counts_list.append((key[0], key[1], key[2], count))
+
+    # Make a dataframe from the list of tuples
+    df = pd.DataFrame(user_emoji_counts_list, columns=['channel', 'user', 'emoji_name', 'count'])
+    return df
+
+def resolve_names(df):
+    # Load slack_ids_to_user_names.csv as a dict
+
+    slack_ids_to_user_names = pd.read_csv('data/slack_ids_to_user_names.csv')
+
+    # Convert slack_ids_to_user_names to a dict
+
+    slack_ids_to_user_names_dict = slack_ids_to_user_names.set_index('user_id').to_dict()['user_name']
+
+    # Map df['user'] to slack_ids_to_user_names
+
+    df['user'] = df['user'].map(slack_ids_to_user_names_dict)
+    return df
