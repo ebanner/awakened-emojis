@@ -10,18 +10,37 @@ class UsersPage extends React.Component {
     super(props);
       this.state = {
         data: null,
+        numEmojisToShow: null,
       }
+  }
+
+  handleClick(user) {
+    const numEmojisToShow = {
+      ...this.state.numEmojisToShow,
+      [user]: this.state.numEmojisToShow[user] + 5,
+    }
+
+    this.setState({
+      ...this.state,
+      numEmojisToShow: numEmojisToShow,
+    });
+
   }
 
   componentDidMount() {
     var data = require('./kings.json');
 
     // Only take a slice of the first 5 items in the list for every key
+    const numEmojisToShow = {};
     for (var key in data) {
-      data[key] = data[key].slice(0, 5);
+      // data[key] = data[key].slice(0, 5);
+      numEmojisToShow[key] = 5;
     }
 
-    this.setState({ data: data });
+    this.setState({
+      data: data,
+      numEmojisToShow: numEmojisToShow
+    });
   }
 
   render() {
@@ -33,21 +52,21 @@ class UsersPage extends React.Component {
         <TitleBar />
         <div class="users-page-body">
             <h1>Users</h1>
-            {Object.keys(this.state.data).map((key, index) => (
+            {Object.keys(this.state.data).map((user, index) => (
                 <>
-                  <h2>{key}</h2>
-                  {this.state.data[key].map((item, index) => (
+                  <h2>{user}</h2>
+                  {this.state.data[user].slice(0, this.state.numEmojisToShow[user]).map((emoji, index) => (
                     // Link to emoji page
-                    <Link to={`/emoji/${item.name}`}>
+                    <Link to={`/emoji/${emoji.name}`}>
                       <img
-                        src={item.url}
+                        src={emoji.url}
                         width="32"
                       />
                     </Link>
                   ))}
-                  {/* <span style={{paddingLeft: "10px"}}>
-                    <button>More</button>
-                  </span> */}
+                  <span style={{paddingLeft: "10px"}}>
+                    <button onClick={() => this.handleClick(user)}>More</button>
+                  </span>
                 </>
             ))}
           {/* <h1>Users</h1>
