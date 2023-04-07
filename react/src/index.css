@@ -20,12 +20,9 @@ and horizontal across the top of the page */
 .title-bar {
   background-color: #333;
   color: white;
-  padding: 15px;
-  /* margin: 10px; */
-  /* text-align: center; */
-  font-family: sans-serif;
-  border: 0px 0px 0px 0px;
-  /* border: 0px; */
+  padding: 12px;
+  /* font-family: sans-serif; */
+  /* border: 0px 0px 0px 0px; */
 }
 
 /* Put some padding between the title-bar

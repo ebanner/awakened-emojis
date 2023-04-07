@@ -5,13 +5,15 @@ import TitleBar from '../../components/index.js';
 
 import './index.css'
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 class UsersPage extends React.Component {
   constructor(props) {
     super(props);
-      this.state = {
-        data: null,
-        numEmojisToShow: null,
-      }
+    this.state = {
+      data: null,
+      numEmojisToShow: null,
+    }
   }
 
   handleClick(user) {
@@ -44,35 +46,39 @@ class UsersPage extends React.Component {
   }
 
   render() {
-    if (! this.state.data) {
-        return null;
+    if (!this.state.data) {
+      return null;
     }
     return (
       <div>
         <TitleBar />
         <div class="users-page-body">
+          <div class="users-header">
             <h1>Users</h1>
-            {Object.keys(this.state.data).map((user, index) => (
-                <>
-                  <h2>{user}</h2>
-                  {this.state.data[user].slice(0, this.state.numEmojisToShow[user]).map((emoji, index) => (
-                    // Link to emoji page
-                    <Link to={`/emoji/${emoji.name}`}>
-                      <img
-                        src={emoji.url}
-                        width="32"
-                      />
-                    </Link>
-                  ))}
-                  {
-                    /* Only show the button if there are more emojis left to show */
-                    this.state.data[user].length > this.state.numEmojisToShow[user] &&
-                      <span style={{paddingLeft: "10px"}}>
-                        <button onClick={() => this.handleClick(user)}>...</button>
-                      </span>
-                  }
-                </>
-            ))}
+          </div>
+          {Object.keys(this.state.data).map((user, index) => (
+            <>
+              <div class="user-chunk">
+                <h4>{user}</h4>
+                {this.state.data[user].slice(0, this.state.numEmojisToShow[user]).map((emoji, index) => (
+                  // Link to emoji page
+                  <Link to={`/emoji/${emoji.name}`}>
+                    <img
+                      src={emoji.url}
+                      width="32"
+                    />
+                  </Link>
+                ))}
+                {
+                  /* Only show the button if there are more emojis left to show */
+                  this.state.data[user].length > this.state.numEmojisToShow[user] &&
+                  <span style={{ paddingLeft: "10px" }}>
+                    <button onClick={() => this.handleClick(user)}>...</button>
+                  </span>
+                }
+              </div>
+            </>
+          ))}
           {/* <h1>Users</h1>
           <pre>
             {JSON.stringify(this.state.data, null, 2)}
