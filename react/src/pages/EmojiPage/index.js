@@ -54,16 +54,17 @@ class EmojiPage extends React.Component {
       // emoji object as a <pre> element
       <>
         <TitleBar />
-        <div
-          // className={styles.emojiPage}
-          class="emoji-page-body"
-        >
-          <h1><pre>:{emojiName}:</pre></h1>
-          <img
-            src={metadata.url}
-            alt={emojiName}
-            width="64"
-          />
+        <div class="emoji-page-body">
+          <div class="emoji-header">
+            <h1><pre>:{emojiName}:</pre></h1>
+          </div>
+          <div class="main-emoji">
+            <img
+              src={metadata.url}
+              alt={emojiName}
+              width="64"
+            />
+          </div>
           {/* <pre
             // className={styles.emojiPage}
           >
@@ -86,23 +87,25 @@ class EmojiPage extends React.Component {
               ))}
             </tbody>
           </table>
-          <h2>Channels</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Count</th>
-              </tr>
-            </thead>
-            <tbody>
-              {metadata.channels.map((channel, index) => (
-                <tr key={index}>
-                  <td>{channel.name}</td>
-                  <td>{channel.count}</td>
+          <div class="channels-section">
+            <h2>Channels</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Count</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {metadata.channels.map((channel, index) => (
+                  <tr key={index}>
+                    <td>{channel.name}</td>
+                    <td>{channel.count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </>
     )

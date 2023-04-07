@@ -25,3 +25,17 @@ and the page-body */
   /* border-width: 20px; */
   /* border: 20px; */
 }
+
+/* Add some margin above and below emoji-header class */
+.emoji-header {
+  margin: 20px 0;
+}
+
+.main-emoji {
+  /* Give me 30px margin above and 20px margin below */
+  margin: 30px 0 20px;
+}
+
+.channels-section {
+  margin: 40px 0;
+}
