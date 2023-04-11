@@ -19,7 +19,7 @@ class UsersPage extends React.Component {
   handleClick(user) {
     const numEmojisToShow = {
       ...this.state.numEmojisToShow,
-      [user]: this.state.numEmojisToShow[user] + 5,
+      [user]: this.state.numEmojisToShow[user] + 50,
     }
 
     this.setState({
