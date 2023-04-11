@@ -56,6 +56,12 @@ class UsersPage extends React.Component {
           <div class="users-header">
             <h1>Users</h1>
           </div>
+          <p>Emojis under your name are emojis where you are the #1 user of that emoji</p>
+          <p>Data snapshot is from 2016-04-04 to 2022-10-24</p>
+          <p>Click into emojis to see a detailed page for them</p>
+          {/* <pre>
+            {JSON.stringify(this.state.data["Leo Pokatu"], null, 2)}
+          </pre> */}
           {Object.keys(this.state.data).map((user, index) => (
             <>
               <div class="user-chunk">
