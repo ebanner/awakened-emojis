@@ -59,11 +59,18 @@ class EmojiPage extends React.Component {
             <h1><pre>:{emojiName}:</pre></h1>
           </div>
           <div class="main-emoji">
-            <img
-              src={metadata.url}
-              alt={emojiName}
-              width="64"
-            />
+            {metadata.type == 'custom' ?
+              <img
+                src={metadata.url}
+                alt={emojiName}
+                width="64"
+              />
+              :
+              <p
+                style={{ fontSize: "48px" }}
+              >{metadata.emoji}
+              </p>
+            }
           </div>
           {/* <pre
             // className={styles.emojiPage}
