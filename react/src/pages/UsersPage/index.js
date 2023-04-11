@@ -49,6 +49,7 @@ class UsersPage extends React.Component {
     if (!this.state.data) {
       return null;
     }
+
     return (
       <div>
         <TitleBar />
@@ -68,11 +69,17 @@ class UsersPage extends React.Component {
                 <h4>{user}</h4>
                 {this.state.data[user].slice(0, this.state.numEmojisToShow[user]).map((emoji, index) => (
                   // Link to emoji page
+
                   <Link to={`/emoji/${emoji.name}`}>
-                    <img
-                      src={emoji.url}
-                      width="32"
-                    />
+                    {emoji.type == "custom" ?
+                      <img
+                        src={emoji.url}
+                        width="32"
+                      />
+                      :
+                      <span /* Make the text size bigger */
+                        style={{ fontSize: "32px" }}
+                      >{emoji.emoji}</span>}
                   </Link>
                 ))}
                 {
