@@ -7,6 +7,19 @@ import './index.css'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import emojiRegex from 'emoji-regex';
+
+
+function isAlphanumeric(str) {
+  const alphanumericRegex = /^[a-zA-Z0-9]$/;
+  return alphanumericRegex.test(str);
+}
+
+function isEmoji(str) {
+  const regex = emojiRegex();
+  return regex.test(str);
+}
+
 class UsersPage extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +32,7 @@ class UsersPage extends React.Component {
   handleClick(user) {
     const numEmojisToShow = {
       ...this.state.numEmojisToShow,
-      [user]: this.state.numEmojisToShow[user] + 50,
+      [user]: this.state.numEmojisToShow[user] * 2,
     }
 
     this.setState({
@@ -61,7 +74,7 @@ class UsersPage extends React.Component {
           <p>Data snapshot is from 2016-04-04 to 2022-10-24</p>
           <p>Click into emojis to see a detailed page for them</p>
           {/* <pre>
-            {JSON.stringify(this.state.data["Leo Pokatu"], null, 2)}
+            {JSON.stringify(this.state.data["ohz"], null, 2)}
           </pre> */}
           {Object.keys(this.state.data).map((user, index) => (
             <>
@@ -78,7 +91,13 @@ class UsersPage extends React.Component {
                       />
                       :
                       <span /* Make the text size bigger */
-                        style={{ fontSize: "32px" }}
+                        style={isEmoji(emoji.emoji) ? 
+                          ! isAlphanumeric(emoji.emoji) ?
+                          { fontSize: "32px" }
+                          :
+                          { fontSize: "0px"}
+                          :
+                          {fontSize: "16px" }}
                       >{emoji.emoji}</span>}
                   </Link>
                 ))}

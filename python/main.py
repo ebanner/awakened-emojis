@@ -35,7 +35,7 @@ def get_reactions(message):
 
 def get_emojis_from_message(message):
     emojis = re.findall(
-        r':[a-z0-9_-]+:',
+        r'\b:([a-z0-9_-]+):\b',
         message['text']
     )
     return emojis
