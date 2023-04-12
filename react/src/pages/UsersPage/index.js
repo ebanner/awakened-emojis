@@ -68,7 +68,7 @@ class UsersPage extends React.Component {
         <TitleBar />
         <div class="users-page-body">
           <div class="users-header">
-            <h1>Users</h1>
+            <h1>User Emojis</h1>
           </div>
           <p>Emojis under your name are emojis where you are the #1 user of that emoji</p>
           <p>Data snapshot is from 2016-04-04 to 2022-10-24</p>

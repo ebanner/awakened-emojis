@@ -5,7 +5,8 @@
     /* set the margin to 20px orange */
     /* margin: 10px; */
     /* 10x left margin */
-    margin-left: 30px;
+    margin-left: 16px;
+    margin-right: 16px;
     /* make the margin orange */
     /* padding 20px */
     /* padding: 10px; */
@@ -16,7 +17,7 @@
 
 .users-header {
   /* Give me some margin above and below */
-  margin: 20px 0;
+  margin: 16px 0;
 }
 
 /* Make user-chunk class have some margin above and below */
