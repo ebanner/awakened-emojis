@@ -90,15 +90,10 @@ class UsersPage extends React.Component {
                         width="32"
                       />
                       :
-                      <span /* Make the text size bigger */
-                        style={isEmoji(emoji.emoji) ? 
-                          ! isAlphanumeric(emoji.emoji) ?
-                          { fontSize: "32px" }
-                          :
-                          { fontSize: "0px"}
-                          :
-                          {fontSize: "16px" }}
-                      >{emoji.emoji}</span>}
+                      emoji.emoji != null ?
+                      <span style={{fontSize: "32px"}}>{emoji.emoji}</span>
+                      :
+                      <span style={{fontSize: "16px"}}>{emoji.name}</span>}
                   </Link>
                 ))}
                 {
