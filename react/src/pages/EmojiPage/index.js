@@ -18,7 +18,7 @@ class EmojiPage extends React.Component {
   }
 
   componentDidMount() {
-    const data = require('./emojis-to-channels-and-users-with-upload-info.json');
+    const data = require('./emojis-to-channels-and-users-with-upload-info-and-popularity.json');
 
     // Set data to the state
     // this.setState({ data: data });
@@ -79,8 +79,13 @@ class EmojiPage extends React.Component {
           </pre> */}
           {(metadata.type == 'custom') && 
             <>
-            <p>Uploaded by <b>{metadata.added_by}</b> on {metadata.date_added}</p>
             <br />
+            <h2>Information</h2>
+            <ul>
+              <li><code>{emojiName}</code> was uploaded by <b>{metadata.added_by}</b> on {metadata.date_added}.</li>
+              <li>It is the <b>{metadata.popularity}</b> most popular emoji.</li>
+            </ul>
+            <br></br>
             </>}
           {console.log(metadata)}
           <h2>Users</h2>
