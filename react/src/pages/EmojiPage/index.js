@@ -72,11 +72,7 @@ class EmojiPage extends React.Component {
               </p>
             }
           </div>
-          {/* <pre
-            // className={styles.emojiPage}
-          >
-            {JSON.stringify(metadata, null, 2)}
-          </pre> */}
+          <br />
           <h2>History</h2>
           <ul>
             {(metadata.type == 'custom') ?
