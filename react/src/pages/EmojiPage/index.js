@@ -77,17 +77,17 @@ class EmojiPage extends React.Component {
           >
             {JSON.stringify(metadata, null, 2)}
           </pre> */}
-          {(metadata.type == 'custom') && 
-            <>
-            <br />
-            <h2>History</h2>
-            <ul>
-              <li><code>{emojiName}</code> was uploaded by <b>{metadata.added_by}</b> on {metadata.date_added}.</li>
-              <li>It is the <b>{metadata.popularity}</b> most popular emoji.</li>
-            </ul>
-            <br></br>
-            </>}
-          {console.log(metadata)}
+          <h2>History</h2>
+          <ul>
+            {(metadata.type == 'custom') ?
+              <>
+                <li><code>{emojiName}</code> was uploaded by <b>{metadata.added_by}</b> on {metadata.date_added}.</li>
+                <li>It is the <b>{metadata.popularity}</b> most popular emoji.</li>
+              </>
+              :
+              <li><code>{emojiName}</code> is the <b>{metadata.popularity}</b> most popular emoji.</li>
+            }
+          </ul>
           <h2>Users</h2>
           <table>
             <thead>
