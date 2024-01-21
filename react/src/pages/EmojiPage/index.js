@@ -80,7 +80,7 @@ class EmojiPage extends React.Component {
           {(metadata.type == 'custom') && 
             <>
             <br />
-            <h2>Summary</h2>
+            <h2>History</h2>
             <ul>
               <li><code>{emojiName}</code> was uploaded by <b>{metadata.added_by}</b> on {metadata.date_added}.</li>
               <li>It is the <b>{metadata.popularity}</b> most popular emoji.</li>
