@@ -88,6 +88,7 @@ class EmojiPage extends React.Component {
               <li><code>{emojiName}</code> is the <b>{metadata.popularity}</b> most popular emoji.</li>
             }
           </ul>
+          <br />
           <h2>Users</h2>
           <table>
             <thead>
