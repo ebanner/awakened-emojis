@@ -4,7 +4,27 @@ import './index.css';
 
 import TitleBar from '../../components/index.js';
 
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+
+
+const EmojiImages = (props) => {
+  return (
+    props.emojiList.slice(0, 6).map((emoji) =>
+      emoji in props.data &&
+      <Link to={`/emoji/${emoji}`}>
+        {props.data[emoji].type == "custom" ?
+          <img
+            src={props.data[emoji].url}
+            width="32"
+          />
+          :
+          props.data[emoji].emoji != null ?
+            <span style={{ fontSize: "32px" }}>{props.data[emoji].emoji}</span>
+            :
+            <span style={{ fontSize: "16px" }}>{props.data[emoji].name}</span>}
+      </Link>
+    ));
+};
 
 
 class EmojiPage extends React.Component {
@@ -18,7 +38,7 @@ class EmojiPage extends React.Component {
   }
 
   componentDidMount() {
-    const data = require('./emojis-to-channels-and-users-with-upload-info-and-popularity.json');
+    const data = require('./emojis-to-channels-and-users-with-upload-info-and-popularity-and-related.json');
 
     // Set data to the state
     // this.setState({ data: data });
@@ -26,7 +46,10 @@ class EmojiPage extends React.Component {
     // const emoji = Object.entries(data)[0];
     const metadata = data[this.state.emojiName];
 
-    this.setState({ metadata: metadata });
+    this.setState({
+      metadata: metadata,
+      data: data,
+    });
   }
 
   render() {
@@ -84,6 +107,11 @@ class EmojiPage extends React.Component {
               <li><code>{emojiName}</code> is the <b>{metadata.popularity}</b> most popular emoji.</li>
             }
           </ul>
+          <br />
+          <h2>Related Emojis</h2>
+          <EmojiImages data={this.state.data} emojiList={metadata.related} />
+          <br />
+          <br />
           <br />
           <h2>Users</h2>
           <table>
