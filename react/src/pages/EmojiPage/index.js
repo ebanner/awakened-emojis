@@ -8,20 +8,22 @@ import { useParams, Link, BrowserRouter as Router } from 'react-router-dom';
 
 
 const EmojiImages = (props) => {
+  const { emojiList, data } = props;
+
   return (
-    props.emojiList.slice(0, 6).map((emoji) =>
-      emoji in props.data &&
-      <Link to={`/emoji/${emoji}`}>
-        {props.data[emoji].type == "custom" ?
+    emojiList.slice(0, 6).map((emoji) =>
+      emoji in data &&
+      <Link to={`/emojis/${emoji}`}>
+        {data[emoji].type == "custom" ?
           <img
-            src={props.data[emoji].url}
+            src={data[emoji].url}
             width="32"
           />
           :
-          props.data[emoji].emoji != null ?
-            <span style={{ fontSize: "32px" }}>{props.data[emoji].emoji}</span>
+          data[emoji].emoji != null ?
+            <span style={{ fontSize: "32px" }}>{data[emoji].emoji}</span>
             :
-            <span style={{ fontSize: "16px" }}>{props.data[emoji].name}</span>}
+            <span style={{ fontSize: "16px" }}>{data[emoji].name}</span>}
       </Link>
     ));
 };

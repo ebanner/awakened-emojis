@@ -47,7 +47,7 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<EmojiPickerPage />} />
-        <Route path="/emoji/:emojiName" element={<EmojiPageWrapper />} />
+        <Route path="/emojis/:emojiName" element={<EmojiPageWrapper />} />
         <Route path="/users" element={<UsersPage />} />
       </Routes>
     </Router>

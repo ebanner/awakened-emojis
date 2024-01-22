@@ -38,7 +38,7 @@ class Grid extends React.Component {
           class="grid-container"
         >
           {dataToShow.map((item, index) => (
-            <Link to={`/emoji/${item.emoji_name}`}>
+            <Link to={`/emojis/${item.emoji_name}`}>
               <img
                 src={item.emoji_url}
                 alt={item.emoji_name}

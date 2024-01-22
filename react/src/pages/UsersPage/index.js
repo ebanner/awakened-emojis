@@ -83,7 +83,7 @@ class UsersPage extends React.Component {
                 {this.state.data[user].slice(0, this.state.numEmojisToShow[user]).map((emoji, index) => (
                   // Link to emoji page
 
-                  <Link to={`/emoji/${emoji.name}`}>
+                  <Link to={`/emojis/${emoji.name}`}>
                     {emoji.type == "custom" ?
                       <img
                         src={emoji.url}
