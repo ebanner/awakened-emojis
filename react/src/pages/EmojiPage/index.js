@@ -4,7 +4,7 @@ import './index.css';
 
 import TitleBar from '../../components/index.js';
 
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, BrowserRouter as Router } from 'react-router-dom';
 
 
 const EmojiImages = (props) => {
@@ -52,6 +52,15 @@ class EmojiPage extends React.Component {
     });
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.emojiName !== prevProps.emojiName) {
+      const metadata = this.state.data[this.props.emojiName];
+      this.setState({
+        emojiName: this.props.emojiName,
+        metadata: metadata
+      });
+    }}
+
   render() {
     if (!this.state.metadata) {
       return null;
@@ -67,11 +76,11 @@ class EmojiPage extends React.Component {
     // console.log(metadata);
 
     // Print out metadata
-    console.log('metadata');
-    console.log(metadata);
+    // console.log('metadata');
+    // console.log(metadata);
 
-    console.log('emoji_url');
-    console.log(metadata.url);
+    // console.log('emoji_url');
+    // console.log(metadata.url);
 
     return (
       // emoji object as a <pre> element
