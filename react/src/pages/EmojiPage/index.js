@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { Helmet } from 'react-helmet';
+
 import './index.css';
 
 import TitleBar from '../../components/index.js';
@@ -61,7 +63,8 @@ class EmojiPage extends React.Component {
         emojiName: this.props.emojiName,
         metadata: metadata
       });
-    }}
+    }
+  }
 
   render() {
     if (!this.state.metadata) {
@@ -84,9 +87,20 @@ class EmojiPage extends React.Component {
     // console.log('emoji_url');
     // console.log(metadata.url);
 
+    const descriptionText = (metadata.type == 'custom') ?
+      `${emojiName} was uploaded by ${metadata.added_by} on ${metadata.date_added}. It is the ${metadata.popularity} most popular emoji.`
+      :
+      `${emojiName} is the ${metadata.popularity} most popular emoji.`
+
     return (
       // emoji object as a <pre> element
-      <>
+      <div>
+        <Helmet>
+          <title>Custom Title for This Route</title>
+          <meta property="og:title" content={emojiName} />
+          <meta property="og:description" content={descriptionText} />
+          {metadata.type == 'custom' && <meta property="og:image" content={metadata.url} />}
+        </Helmet>
         <TitleBar />
         <div class="emoji-page-body">
           <div class="emoji-header">
@@ -115,8 +129,7 @@ class EmojiPage extends React.Component {
                 <li>It is the <b>{metadata.popularity}</b> most popular emoji.</li>
               </>
               :
-              <li><code>{emojiName}</code> is the <b>{metadata.popularity}</b> most popular emoji.</li>
-            }
+              <li><code>{emojiName}</code> is the <b>{metadata.popularity}</b> most popular emoji.</li>}
           </ul>
           <br />
           <h2>Related Emojis</h2>
@@ -161,7 +174,7 @@ class EmojiPage extends React.Component {
             </table>
           </div>
         </div>
-      </>
+      </div>
     )
 
   }
