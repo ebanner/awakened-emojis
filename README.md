@@ -8,7 +8,7 @@ There's an emoji picker
 
 ![image](https://github.com/ebanner/awakened-emojis/assets/2068912/02b9078f-b2ea-4a41-b2a5-8eaaf6f52f06)
 
-And there's also a grouping of users by their favorite emojis
+And there's also a grouping of users by their favorite emojis.
 
 ![image](https://github.com/ebanner/awakened-emojis/assets/2068912/43f3a94e-6767-4656-be83-1cef122cdb06)
 
