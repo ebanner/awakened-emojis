@@ -12,6 +12,6 @@ And there's also a grouping of users by their favorite emojis.
 
 ![image](https://github.com/ebanner/awakened-emojis/assets/2068912/43f3a94e-6767-4656-be83-1cef122cdb06)
 
-You can explore individual emojis as well
+You can explore individual emojis as well.
 
 ![image](https://github.com/ebanner/awakened-emojis/assets/2068912/4fc222a1-be50-47eb-872c-8d7564c7e229)
