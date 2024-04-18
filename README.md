@@ -1,4 +1,4 @@
-# #awakened-emoji-search
+# #awakened-emojis
 
 This is a fun little web app which lists out emojis from the `r/awakened` slack group
 
