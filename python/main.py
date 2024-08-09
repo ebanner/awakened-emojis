@@ -8,7 +8,7 @@ from tqdm import tqdm
 
 
 def get_channels():
-    directory = 'awakened_zip'
+    directory = 'data/awakened_zip'
     dirs = [d for d in os.listdir(directory) if os.path.isdir(os.path.join(directory, d))]
     all_channels = [d.rstrip('/') for d in dirs]
     return all_channels
@@ -25,13 +25,15 @@ def get_counts(emoji_list):
 
 
 def get_emoji_files(channel):
-    dir_path = f'awakened_zip/{channel}'
+    dir_path = f'data/awakened_zip/{channel}'
     files = glob.glob(f"{dir_path}/*.json")
     return files
+
 
 def get_reactions(message):
     reactions = message.get('reactions', [])
     return reactions
+
 
 def get_emojis_from_message(message):
     emojis = re.findall(
@@ -39,6 +41,7 @@ def get_emojis_from_message(message):
         message['text']
     )
     return emojis
+
 
 def get_emojis_from_messages(messages):
     all_emojis = []
@@ -53,6 +56,7 @@ def get_emojis_from_reactions(reactions):
         emojis.append(reaction['name'])
     return emojis
 
+
 def get_messages(emoji_file):
     messages = json.load(open(emoji_file))
 
@@ -60,6 +64,7 @@ def get_messages(emoji_file):
     messages = [message for message in messages if 'user' in message]
 
     return messages
+
 
 def get_emojis(messages):
     all_reactions = []
@@ -71,6 +76,7 @@ def get_emojis(messages):
     reaction_emojis = get_emojis_from_reactions(all_reactions)
 
     return message_emojis + reaction_emojis
+
 
 def get_emoji_counts(channel, head=-1):
     emoji_files = get_emoji_files(channel)
@@ -101,6 +107,7 @@ def get_emoji_counts_for_all_channels():
                 total_emoji_counts[emoji] = count
 
     return total_emoji_counts
+
 
 def get_channel_user_emoji_counts():
     # Get all channels
@@ -175,6 +182,7 @@ def get_channel_user_emoji_counts():
     # Make a dataframe from the list of tuples
     df = pd.DataFrame(user_emoji_counts_list, columns=['channel', 'user', 'emoji_name', 'count'])
     return df
+
 
 def resolve_names(df):
     # Load slack_ids_to_user_names.csv as a dict
