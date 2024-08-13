@@ -1,12 +1,41 @@
-import React, { Component } from 'react';
-
-import { Helmet } from 'react-helmet';
+import React, { Component, useRef } from 'react';
 
 import './index.css';
 
 import TitleBar from '../../components/index.js';
 
 import { useParams, Link, BrowserRouter as Router } from 'react-router-dom';
+
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+
+// Register the necessary components with Chart.js
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+
+const LineChart = ({ labels, dataPoints }) => {
+  const data = {
+    labels: labels,
+    datasets: [
+      {
+        label: 'agontfhi',
+        data: dataPoints,
+        fill: false,
+        borderColor: 'rgba(66, 135, 245, 0.6)',
+      },
+    ],
+  };
+
+  const options = {
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
+
+  return <Line data={data} options={options} />;
+};
+
 
 
 const EmojiImages = (props) => {
@@ -41,8 +70,22 @@ class EmojiPage extends React.Component {
     };
   }
 
-  componentDidMount() {
-    const data = require('./emojis-to-channels-and-users-with-upload-info-and-popularity-and-related.json');
+  async componentDidMount() {
+    const response = await fetch('http://localhost:5001');
+    const data = await response.json();
+
+    console.log(data);
+
+    const resp = await fetch('http://localhost:5001/usage');
+    const usage = await resp.json();
+
+    var date;
+    for (var i = 0; i < usage.usage.length; i++) {
+      date = new Date(usage.usage[i].ts * 1000);
+      usage.usage[i].date = date.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit' });
+    }
+
+    console.log(usage);
 
     // Set data to the state
     // this.setState({ data: data });
@@ -53,6 +96,7 @@ class EmojiPage extends React.Component {
     this.setState({
       metadata: metadata,
       data: data,
+      usage: usage,
     });
   }
 
@@ -71,7 +115,9 @@ class EmojiPage extends React.Component {
       return null;
     }
 
-    const { emojiName, metadata } = this.state;
+    const { emojiName, metadata, usage } = this.state;
+
+    console.log(usage);
 
     // Get the first element from data
 
@@ -92,21 +138,19 @@ class EmojiPage extends React.Component {
       :
       `${emojiName} is the ${metadata.popularity} most popular emoji.`
 
+    
+    const labels = usage.usage.map(use => use.date);
+    const dataPoints = usage.usage.map(use => use.count);
+
     return (
       // emoji object as a <pre> element
       <div>
-        <Helmet>
-          <title>Custom Title for This Route</title>
-          <meta property="og:title" content={emojiName} />
-          <meta property="og:description" content={descriptionText} />
-          {metadata.type == 'custom' && <meta property="og:image" content={metadata.url} />}
-        </Helmet>
         <TitleBar />
-        <div class="emoji-page-body">
-          <div class="emoji-header">
+        <div class="body container">
+          <div class="name mt-4">
             <h1><pre>:{emojiName}:</pre></h1>
           </div>
-          <div class="main-emoji">
+          <div class="emoji mt-4 pt-2">
             {metadata.type == 'custom' ?
               <img
                 src={metadata.url}
@@ -120,58 +164,86 @@ class EmojiPage extends React.Component {
               </p>
             }
           </div>
-          <br />
-          <h2>History</h2>
-          <ul>
-            {(metadata.type == 'custom') ?
-              <>
-                <li><code>{emojiName}</code> was uploaded by <b>{metadata.added_by}</b> on {metadata.date_added}.</li>
-                <li>It is the <b>{metadata.popularity}</b> most popular emoji.</li>
-              </>
-              :
-              <li><code>{emojiName}</code> is the <b>{metadata.popularity}</b> most popular emoji.</li>}
-          </ul>
-          <br />
-          <h2>Related Emojis</h2>
-          <EmojiImages data={this.state.data} emojiList={metadata.related} />
-          <br />
-          <br />
-          <br />
-          <h2>Users</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Count</th>
-              </tr>
-            </thead>
-            <tbody>
-              {metadata.users.map((user, index) => (
-                <tr key={index}>
-                  <td>{user.name}</td>
-                  <td>{user.count}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div class="channels-section">
-            <h2>Channels</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Count</th>
-                </tr>
-              </thead>
-              <tbody>
-                {metadata.channels.map((channel, index) => (
-                  <tr key={index}>
-                    <td>{channel.name}</td>
-                    <td>{channel.count}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div class="mt-5">
+            <div class="row g-1">
+              <div class="col-lg-6">
+                <div class="history">
+                  <h2>History</h2>
+                  <ul>
+                    {(metadata.type == 'custom') ?
+                      <>
+                        <li><code>{emojiName}</code> was uploaded by <b>{metadata.added_by}</b> on {metadata.date_added}.</li>
+                        <li>It is the <b>{metadata.popularity}</b> most popular emoji.</li>
+                      </>
+                      :
+                      <li><code>{emojiName}</code> is the <b>{metadata.popularity}</b> most popular emoji.</li>}
+                  </ul>
+                </div>
+                <div class="related mt-4 pt-2">
+                  <h2>Related Emojis</h2>
+                  <EmojiImages data={this.state.data} emojiList={metadata.related} />
+                </div>
+                <div class="usage col-lg-12 d-none mt-4 pt-2 d-none d-sm-block d-md-none">
+                  <h2>Usage</h2>
+                  <div style={{ width: '100%' }}>
+                    <LineChart labels={labels} dataPoints={dataPoints} />
+                  </div>
+                </div>
+                <div class="box" style={{ "display": "flex", gap: "100px" }}>
+                  <div class="users mt-4 pt-4" style={{ gap: "100px" }}>
+                    <h2>Users</h2>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Count</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {metadata.users.map((user, index) => (
+                          <tr key={index}>
+                            <td>{user.name}</td>
+                            <td>{user.count}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="channels mt-4 pt-4">
+                    <h2>Channels</h2>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Count</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {metadata.channels.map((channel, index) => (
+                          <tr key={index}>
+                            <td>{channel.name}</td>
+                            <td>{channel.count}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="usage col-lg-6 d-none d-md-block">
+                <h2>Usage</h2>
+                <div style={{ width: '100%' }}>
+                  <LineChart labels={labels} dataPoints={dataPoints} />
+                </div>
+              </div>
+              <div class="row">
+
+              </div>
+            </div>
+          </div>
+          <div class="column">
+
+
           </div>
         </div>
       </div>
