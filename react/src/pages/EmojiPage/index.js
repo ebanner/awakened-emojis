@@ -154,7 +154,7 @@ class EmojiPage extends React.Component {
             }
           </div>
           <div class="mt-5">
-            <div class="row g-1">
+            <div class="row g-5">
               <div class="col-lg-6">
                 <div class="history">
                   <h2>History</h2>
@@ -224,9 +224,6 @@ class EmojiPage extends React.Component {
                 <div style={{ width: '100%' }}>
                   <LineChart emojiName={emojiName} labels={labels} dataPoints={dataPoints} />
                 </div>
-              </div>
-              <div class="row">
-
               </div>
             </div>
           </div>
