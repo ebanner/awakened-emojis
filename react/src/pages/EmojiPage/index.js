@@ -12,12 +12,12 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 // Register the necessary components with Chart.js
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const LineChart = ({ labels, dataPoints }) => {
+const LineChart = ({ emojiName, labels, dataPoints }) => {
   const data = {
     labels: labels,
     datasets: [
       {
-        label: 'agontfhi',
+        label: emojiName,
         data: dataPoints,
         fill: false,
         borderColor: 'rgba(66, 135, 245, 0.6)',
@@ -39,22 +39,21 @@ const LineChart = ({ labels, dataPoints }) => {
 
 
 const EmojiImages = (props) => {
-  const { emojiList, data } = props;
+  const { emojiList } = props;
 
   return (
     emojiList.slice(0, 6).map((emoji) =>
-      emoji in data &&
-      <Link to={`/emojis/${emoji}`}>
-        {data[emoji].type == "custom" ?
+      <Link to={`/emojis/${emoji.name}`}>
+        {emoji.type == "custom" ?
           <img
-            src={data[emoji].url}
+            src={emoji.url}
             width="32"
           />
           :
-          data[emoji].emoji != null ?
-            <span style={{ fontSize: "32px" }}>{data[emoji].emoji}</span>
+          emoji.emoji != null ?
+            <span style={{ fontSize: "32px" }}>{emoji.emoji}</span>
             :
-            <span style={{ fontSize: "16px" }}>{data[emoji].name}</span>}
+            <span style={{ fontSize: "16px" }}>{emoji.name}</span>}
       </Link>
     ));
 };
@@ -71,33 +70,21 @@ class EmojiPage extends React.Component {
   }
 
   async componentDidMount() {
-    const response = await fetch('http://localhost:5001');
-    const data = await response.json();
+    const response = await fetch(`http://localhost:5001/${this.state.emojiName}`);
+    const metadata = await response.json();
 
-    console.log(data);
+    console.log(metadata);
 
-    const resp = await fetch('http://localhost:5001/usage');
+    const resp = await fetch(`http://localhost:5001/${this.state.emojiName}`);
     const usage = await resp.json();
 
     var date;
-    for (var i = 0; i < usage.usage.length; i++) {
-      date = new Date(usage.usage[i].ts * 1000);
-      usage.usage[i].date = date.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit' });
+    for (var i = 0; i < metadata.usage.length; i++) {
+      date = new Date(metadata.usage[i].ts * 1000);
+      metadata.usage[i].date = date.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit' });
     }
 
-    console.log(usage);
-
-    // Set data to the state
-    // this.setState({ data: data });
-
-    // const emoji = Object.entries(data)[0];
-    const metadata = data[this.state.emojiName];
-
-    this.setState({
-      metadata: metadata,
-      data: data,
-      usage: usage,
-    });
+    this.setState({ metadata: metadata });
   }
 
   componentDidUpdate(prevProps) {
@@ -115,9 +102,9 @@ class EmojiPage extends React.Component {
       return null;
     }
 
-    const { emojiName, metadata, usage } = this.state;
+    const { emojiName, metadata } = this.state;
 
-    console.log(usage);
+    const usage = metadata.usage;
 
     // Get the first element from data
 
@@ -133,14 +120,16 @@ class EmojiPage extends React.Component {
     // console.log('emoji_url');
     // console.log(metadata.url);
 
+    console.log('related', metadata.related);
+
     const descriptionText = (metadata.type == 'custom') ?
       `${emojiName} was uploaded by ${metadata.added_by} on ${metadata.date_added}. It is the ${metadata.popularity} most popular emoji.`
       :
       `${emojiName} is the ${metadata.popularity} most popular emoji.`
 
-    
-    const labels = usage.usage.map(use => use.date);
-    const dataPoints = usage.usage.map(use => use.count);
+
+    const labels = usage.map(use => use.date);
+    const dataPoints = usage.map(use => use.count);
 
     return (
       // emoji object as a <pre> element
@@ -181,12 +170,12 @@ class EmojiPage extends React.Component {
                 </div>
                 <div class="related mt-4 pt-2">
                   <h2>Related Emojis</h2>
-                  <EmojiImages data={this.state.data} emojiList={metadata.related} />
+                  <EmojiImages emojiList={metadata.related} />
                 </div>
                 <div class="usage col-lg-12 d-none mt-4 pt-2 d-none d-sm-block d-md-none">
                   <h2>Usage</h2>
                   <div style={{ width: '100%' }}>
-                    <LineChart labels={labels} dataPoints={dataPoints} />
+                    <LineChart emojiName={emojiName} labels={labels} dataPoints={dataPoints} />
                   </div>
                 </div>
                 <div class="box" style={{ "display": "flex", gap: "100px" }}>
@@ -233,7 +222,7 @@ class EmojiPage extends React.Component {
               <div class="usage col-lg-6 d-none d-md-block">
                 <h2>Usage</h2>
                 <div style={{ width: '100%' }}>
-                  <LineChart labels={labels} dataPoints={dataPoints} />
+                  <LineChart emojiName={emojiName} labels={labels} dataPoints={dataPoints} />
                 </div>
               </div>
               <div class="row">
