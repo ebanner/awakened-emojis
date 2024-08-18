@@ -70,13 +70,8 @@ class EmojiPage extends React.Component {
   }
 
   async componentDidMount() {
-    const response = await fetch(`http://localhost:5001/${this.state.emojiName}`);
+    const response = await fetch(`https://hrciqioroiwbp5urkjrfrfytkm0ztjwo.lambda-url.us-east-1.on.aws/${this.state.emojiName}`);
     const metadata = await response.json();
-
-    console.log(metadata);
-
-    const resp = await fetch(`http://localhost:5001/${this.state.emojiName}`);
-    const usage = await resp.json();
 
     var date;
     for (var i = 0; i < metadata.usage.length; i++) {
