@@ -59,6 +59,16 @@ const EmojiImages = (props) => {
 };
 
 
+function processUsage(usage) {
+  var date;
+  for (var i = 0; i < usage.length; i++) {
+    date = new Date(usage[i].ts * 1000);
+    usage[i].date = date.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit' });
+  }
+  return usage;
+}
+
+
 class EmojiPage extends React.Component {
 
   constructor(props) {
@@ -66,18 +76,21 @@ class EmojiPage extends React.Component {
     this.state = {
       data: null,
       emojiName: props.emojiName,
+      usage: [],
     };
   }
 
   async componentDidMount() {
-    const response = await fetch(`https://hrciqioroiwbp5urkjrfrfytkm0ztjwo.lambda-url.us-east-1.on.aws/${this.state.emojiName}`);
-    const metadata = await response.json();
+    const API_HOSTNAME = 'https://hrciqioroiwbp5urkjrfrfytkm0ztjwo.lambda-url.us-east-1.on.aws'
+    // const API_HOSTNAME = 'http://localhost:5001'
 
-    var date;
-    for (var i = 0; i < metadata.usage.length; i++) {
-      date = new Date(metadata.usage[i].ts * 1000);
-      metadata.usage[i].date = date.toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit' });
-    }
+    // Do a fetch and use a callback to process the response - don't use await
+    fetch(`${API_HOSTNAME}/usage/${this.state.emojiName}`)
+      .then(response => response.json())
+      .then(data => this.setState({ usage: processUsage(data.usage) }));
+
+    const response = await fetch(`${API_HOSTNAME}/${this.state.emojiName}`);
+    const metadata = await response.json();
 
     this.setState({ metadata: metadata });
   }
@@ -97,9 +110,7 @@ class EmojiPage extends React.Component {
       return null;
     }
 
-    const { emojiName, metadata } = this.state;
-
-    const usage = metadata.usage;
+    const { emojiName, metadata, usage } = this.state;
 
     // Get the first element from data
 
@@ -115,7 +126,7 @@ class EmojiPage extends React.Component {
     // console.log('emoji_url');
     // console.log(metadata.url);
 
-    console.log('related', metadata.related);
+    console.log('usage', usage);
 
     const descriptionText = (metadata.type == 'custom') ?
       `${emojiName} was uploaded by ${metadata.added_by} on ${metadata.date_added}. It is the ${metadata.popularity} most popular emoji.`
@@ -167,12 +178,14 @@ class EmojiPage extends React.Component {
                   <h2>Related Emojis</h2>
                   <EmojiImages emojiList={metadata.related} />
                 </div>
-                <div class="usage col-lg-12 d-none mt-4 pt-2 d-none d-sm-block d-md-none">
-                  <h2>Usage</h2>
-                  <div style={{ width: '100%' }}>
-                    <LineChart emojiName={emojiName} labels={labels} dataPoints={dataPoints} />
+                {usage.length > 0 &&
+                  <div class="usage col-lg-12 d-none mt-4 pt-2 d-none d-sm-block d-md-none">
+                    <h2>Usage</h2>
+                    <div style={{ width: '100%' }}>
+                      <LineChart emojiName={emojiName} labels={labels} dataPoints={dataPoints} />
+                    </div>
                   </div>
-                </div>
+                }
                 <div class="box" style={{ "display": "flex", gap: "100px" }}>
                   <div class="users mt-4 pt-4" style={{ gap: "100px" }}>
                     <h2>Users</h2>
@@ -214,12 +227,14 @@ class EmojiPage extends React.Component {
                   </div>
                 </div>
               </div>
-              <div class="usage col-lg-6 d-none d-md-block">
-                <h2>Usage</h2>
-                <div style={{ width: '100%' }}>
-                  <LineChart emojiName={emojiName} labels={labels} dataPoints={dataPoints} />
+              {usage.length > 0 &&
+                <div class="usage col-lg-6 d-none d-md-block">
+                  <h2>Usage</h2>
+                  <div style={{ width: '100%' }}>
+                    <LineChart emojiName={emojiName} labels={labels} dataPoints={dataPoints} />
+                  </div>
                 </div>
-              </div>
+              }
             </div>
           </div>
           <div class="column">

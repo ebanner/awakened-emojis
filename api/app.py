@@ -85,19 +85,28 @@ def get_emoji_metadata(emoji):
     end = time.time()
     print(end-start, 'get_metadata')
 
+    # start = time.time()
+    # usage = get_usage_sqlite(emoji)
+    # end = time.time()
+    # print(end-start, 'get_usage_sqlite3')
+
+    metadata['name'] = emoji
+    metadata['usage'] = []
+    return jsonify(metadata)
+
+
+@app.route('/usage/<emoji>')
+def get_emoji_usage(emoji):
     start = time.time()
     usage = get_usage_sqlite(emoji)
     end = time.time()
     print(end-start, 'get_usage_sqlite3')
 
-    metadata['name'] = emoji
-    metadata['usage'] = usage
-    return jsonify(metadata)
-
-
-
-
-
+    usage_payload = {
+        'name': emoji,
+        'usage': usage
+    }
+    return jsonify(usage_payload)
 
 
 if __name__ == '__main__':

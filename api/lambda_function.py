@@ -119,21 +119,35 @@ def lambda_handler(event, context):
             'statusCode': 200,
             'body': 'ok',
         }
+    elif path.startswith('/usage'):
+        emoji = path.split('/usage/')[-1]
+        usage = get_usage_sqlite(emoji)
+        usage_payload = {
+            'name': emoji,
+            'usage': usage
+        }
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Content-Type',
+            },
+            'body': json.dumps(usage_payload),
+        }
+    else:
+        emoji = get_emoji(event)
+        metadata = get_metadata(emoji)
+        print('RETURNED FROM GET_METADATA')
+        metadata['name'] = emoji
+        metadata['usage'] = []
 
-    emoji = get_emoji(event)
-    metadata = get_metadata(emoji)
-    print('RETURNED FROM GET_METADATA')
-    usage = get_usage_sqlite(emoji)
-    metadata['name'] = emoji
-    metadata['usage'] = usage
+        print('METADATA', metadata)
 
-    print('METADATA', metadata)
-
-    return {
-        'statusCode': 200,
-        'headers': {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'Content-Type',
-        },
-        'body': json.dumps(metadata),
-    }
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Content-Type',
+            },
+            'body': json.dumps(metadata),
+        }
