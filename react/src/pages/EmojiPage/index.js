@@ -128,12 +128,6 @@ class EmojiPage extends React.Component {
 
     console.log('usage', usage);
 
-    const descriptionText = (metadata.type == 'custom') ?
-      `${emojiName} was uploaded by ${metadata.added_by} on ${metadata.date_added}. It is the ${metadata.popularity} most popular emoji.`
-      :
-      `${emojiName} is the ${metadata.popularity} most popular emoji.`
-
-
     const labels = usage.map(use => use.date);
     const dataPoints = usage.map(use => use.count);
 
@@ -179,7 +173,7 @@ class EmojiPage extends React.Component {
                   <EmojiImages emojiList={metadata.related} />
                 </div>
                 {usage.length > 0 &&
-                  <div class="usage col-lg-12 d-none mt-4 pt-2 d-none d-sm-block d-md-none">
+                  <div class="usage col-lg-12 mt-4 pt-2 d-sm-block d-md-none">
                     <h2>Usage</h2>
                     <div style={{ width: '100%' }}>
                       <LineChart emojiName={emojiName} labels={labels} dataPoints={dataPoints} />
