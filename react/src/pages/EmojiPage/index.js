@@ -77,6 +77,8 @@ class EmojiPage extends React.Component {
       data: null,
       emojiName: props.emojiName,
       usage: [],
+      channels: [],
+      users: [],
     };
   }
 
@@ -88,6 +90,14 @@ class EmojiPage extends React.Component {
     fetch(`${API_HOSTNAME}/usage/${this.state.emojiName}`)
       .then(response => response.json())
       .then(data => this.setState({ usage: processUsage(data.usage) }));
+
+    fetch(`${API_HOSTNAME}/${this.state.emojiName}/users_and_channels`)
+      .then(response => response.json())
+      .then(data => this.setState({ channels: data.channels, users: data.users }));
+
+    fetch(`${API_HOSTNAME}/${this.state.emojiName}/upload_data`)
+      .then(response => response.json())
+      .then(data => this.setState({ date_added: data.date_added, added_by: data.added_by }));
 
     const response = await fetch(`${API_HOSTNAME}/${this.state.emojiName}`);
     const metadata = await response.json();
@@ -110,23 +120,19 @@ class EmojiPage extends React.Component {
       return null;
     }
 
-    const { emojiName, metadata, usage } = this.state;
+    const {
+      emojiName,
+      metadata,
+      usage,
+      channels,
+      users,
+      date_added,
+      added_by,
+    } = this.state;
 
-    // Get the first element from data
+    console.log('date_added', date_added);
 
-    // console.log('emoji');
-    // console.log(emoji);
-
-    // console.log(metadata);
-
-    // Print out metadata
-    // console.log('metadata');
-    // console.log(metadata);
-
-    // console.log('emoji_url');
-    // console.log(metadata.url);
-
-    console.log('usage', usage);
+    console.log('metadata', metadata);
 
     const labels = usage.map(use => use.date);
     const dataPoints = usage.map(use => use.count);
@@ -161,7 +167,7 @@ class EmojiPage extends React.Component {
                   <ul>
                     {(metadata.type == 'custom') ?
                       <>
-                        <li><code>{emojiName}</code> was uploaded by <b>{metadata.added_by}</b> on {metadata.date_added}.</li>
+                        {added_by && date_added && <li><code>{emojiName}</code> was uploaded by <b>{added_by}</b> on {date_added}.</li>}
                         <li>It is the <b>{metadata.popularity}</b> most popular emoji.</li>
                       </>
                       :
@@ -191,7 +197,7 @@ class EmojiPage extends React.Component {
                         </tr>
                       </thead>
                       <tbody>
-                        {metadata.users.map((user, index) => (
+                        {users && users.map((user, index) => (
                           <tr key={index}>
                             <td>{user.name}</td>
                             <td>{user.count}</td>
@@ -210,7 +216,7 @@ class EmojiPage extends React.Component {
                         </tr>
                       </thead>
                       <tbody>
-                        {metadata.channels.map((channel, index) => (
+                        {channels && channels.map((channel, index) => (
                           <tr key={index}>
                             <td>{channel.name}</td>
                             <td>{channel.count}</td>

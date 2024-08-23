@@ -8,10 +8,17 @@ import json
 
 
 def get_emoji_upload_data():
+    """
+
+    Highlight all the emojis on the customize slack page and copy and paste them
+    into a text file called emojis.txt.
+
+    """
+    
     with open('emojis.txt') as f:
         lines = [line.strip() for line in f.readlines()]
 
-    emojis = []
+    emojis = {}
     for i in range(len(lines)):
         if lines[i].startswith(':') and lines[i].endswith(':'):
             emoji = lines[i]
@@ -28,11 +35,11 @@ def get_emoji_upload_data():
                 assert not lines[i].startswith(':')
             i += 1
 
-            emojis.append({
-                'name': emoji,
-                'upload_date': date,
-                'user': user
-            })
+            emoji_name = emoji[1:-1] # strip off colons
+            emojis[emoji_name] = {
+                'date_added': date,
+                'added_by': user
+            }
     return emojis
 
 
@@ -41,8 +48,8 @@ def get_users_and_channels():
 
     metadata = {}
     for emoji, group in tqdm(df.groupby('emoji')):
-        channels = group.groupby('channel').count()[['emoji']].rename(columns={'emoji': 'count'}).reset_index().to_dict(orient='records')
-        users = group.groupby('user').count()[['emoji']].rename(columns={'emoji': 'count'}).reset_index().to_dict(orient='records')
+        channels = group.groupby('channel').count()[['emoji']].reset_index().rename(columns={'emoji': 'count', 'channel': 'name'}).to_dict(orient='records')
+        users = group.groupby('user').count()[['emoji']].reset_index().rename(columns={'emoji': 'count', 'user': 'name'}).to_dict(orient='records')
         metadata[emoji] = {
             'channels': channels,
             'users': users

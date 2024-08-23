@@ -18,6 +18,10 @@ data = json.load(open('emojis-to-channels-and-users-with-upload-info-and-popular
 end = time.time()
 print(end-start, 'emojis-to-channels-and-users-with-upload-info-and-popularity-and-related.json')
 
+users_and_channels = json.load(open('users_and_channels.json'))
+
+emoji_upload_data = json.load(open('emoji_upload_data.json'))
+
 
 import copy
 
@@ -107,6 +111,30 @@ def get_emoji_usage(emoji):
         'usage': usage
     }
     return jsonify(usage_payload)
+
+
+@app.route('/<emoji>/users_and_channels')
+def get_users_and_channels(emoji):
+    start = time.time()
+    result = users_and_channels[emoji]
+    end = time.time()
+    print(end-start, 'get_usage_sqlite3')
+
+    payload = {
+        'name': emoji,
+        'users': result['users'],
+        'channels': result['channels'],
+    }
+    return jsonify(payload)
+
+
+@app.route('/<emoji>/upload_data')
+def get_upload_data(emoji):
+    print('emoji', emoji)
+    print('emoji_upload_data', emoji_upload_data)
+    result = emoji_upload_data[emoji]
+    payload = result
+    return jsonify(payload)
 
 
 if __name__ == '__main__':
