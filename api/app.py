@@ -80,7 +80,7 @@ ORDER BY month;
     return usage
 
 
-@app.route('/<emoji>')
+@app.route('/<emoji>/metadata')
 def get_emoji_metadata(emoji):
     if emoji == 'favicon.ico':
         return jsonify({})
@@ -99,7 +99,7 @@ def get_emoji_metadata(emoji):
     return jsonify(metadata)
 
 
-@app.route('/usage/<emoji>')
+@app.route('/<emoji>/usage')
 def get_emoji_usage(emoji):
     start = time.time()
     usage = get_usage_sqlite(emoji)

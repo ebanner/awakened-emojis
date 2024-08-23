@@ -87,7 +87,7 @@ class EmojiPage extends React.Component {
     // const API_HOSTNAME = 'http://localhost:5001'
 
     // Do a fetch and use a callback to process the response - don't use await
-    fetch(`${API_HOSTNAME}/usage/${this.state.emojiName}`)
+    fetch(`${API_HOSTNAME}/${this.state.emojiName}/usage`)
       .then(response => response.json())
       .then(data => this.setState({ usage: processUsage(data.usage) }));
 
@@ -99,7 +99,7 @@ class EmojiPage extends React.Component {
       .then(response => response.json())
       .then(data => this.setState({ date_added: data.date_added, added_by: data.added_by }));
 
-    const response = await fetch(`${API_HOSTNAME}/${this.state.emojiName}`);
+    const response = await fetch(`${API_HOSTNAME}/${this.state.emojiName}/metadata`);
     const metadata = await response.json();
 
     this.setState({ metadata: metadata });

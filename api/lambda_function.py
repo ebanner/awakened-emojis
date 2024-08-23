@@ -8,20 +8,22 @@ import sqlite3
 
 import time
 
+CORS_HEADERS = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+}
 
 data = json.load(open('emojis-to-channels-and-users-with-upload-info-and-popularity-and-related.json'))
 data_json = json.dumps(data)
+
+users_and_channels = json.load(open('users_and_channels.json'))
+
+emoji_upload_data = json.load(open('emoji_upload_data.json'))
 
 
 def get_path(event):
     path = event['requestContext']['http']['path']
     return path
-
-
-def get_emoji(event):
-    path = event['requestContext']['http']['path']
-    _, emoji = path.split('/')
-    return emoji
     
 
 def get_metadata(emoji):
@@ -119,8 +121,10 @@ def lambda_handler(event, context):
             'statusCode': 200,
             'body': 'ok',
         }
-    elif path.startswith('/usage'):
-        emoji = path.split('/usage/')[-1]
+
+    _, emoji, action = path.split('/')
+
+    if action == 'usage':
         usage = get_usage_sqlite(emoji)
         usage_payload = {
             'name': emoji,
@@ -128,14 +132,31 @@ def lambda_handler(event, context):
         }
         return {
             'statusCode': 200,
-            'headers': {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': 'Content-Type',
-            },
+            'headers': CORS_HEADERS,
             'body': json.dumps(usage_payload),
         }
+    elif action == 'users_and_channels':
+        result = users_and_channels[emoji]
+        payload = {
+            'name': emoji,
+            'users': result['users'],
+            'channels': result['channels'],
+        }
+        return {
+            'statusCode': 200,
+            'headers': CORS_HEADERS,
+            'body': json.dumps(payload),
+        }
+    elif action == 'upload_data':
+        result = emoji_upload_data[emoji]
+        payload = result
+        return {
+            'statusCode': 200,
+            'headers': CORS_HEADERS,
+            'body': json.dumps(payload),
+        }
     else:
-        emoji = get_emoji(event)
+        assert action == 'metadata'
         metadata = get_metadata(emoji)
         print('RETURNED FROM GET_METADATA')
         metadata['name'] = emoji
