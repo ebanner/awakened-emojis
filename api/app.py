@@ -20,7 +20,7 @@ print(end-start, 'emojis-to-channels-and-users-with-upload-info-and-popularity-a
 
 users_and_channels = json.load(open('users_and_channels.json'))
 
-emoji_upload_data = json.load(open('emoji_upload_data.json'))
+emoji_data = json.load(open('emojis.json'))
 
 
 import copy
@@ -128,11 +128,9 @@ def get_users_and_channels(emoji):
     return jsonify(payload)
 
 
-@app.route('/<emoji>/upload_data')
-def get_upload_data(emoji):
-    print('emoji', emoji)
-    print('emoji_upload_data', emoji_upload_data)
-    result = emoji_upload_data[emoji]
+@app.route('/<emoji>/data')
+def get_data(emoji):
+    result = emoji_data[emoji]
     payload = result
     return jsonify(payload)
 

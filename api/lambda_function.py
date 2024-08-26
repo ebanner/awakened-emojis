@@ -18,7 +18,7 @@ data_json = json.dumps(data)
 
 users_and_channels = json.load(open('users_and_channels.json'))
 
-emoji_upload_data = json.load(open('emoji_upload_data.json'))
+emoji_data = json.load(open('emojis.json'))
 
 
 def get_path(event):
@@ -147,8 +147,8 @@ def lambda_handler(event, context):
             'headers': CORS_HEADERS,
             'body': json.dumps(payload),
         }
-    elif action == 'upload_data':
-        result = emoji_upload_data[emoji]
+    elif action == 'data':
+        result = emoji_data[emoji]
         payload = result
         return {
             'statusCode': 200,
