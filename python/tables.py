@@ -26,6 +26,42 @@ id_to_user = {
 }
 
 
+def get_emoji_upload_data():
+    """
+
+    Highlight all the emojis on the customize slack page and copy and paste them
+    into a text file called emojis.txt.
+
+    """
+    
+    with open('emojis.txt') as f:
+        lines = [line.strip() for line in f.readlines()]
+
+    emojis = {}
+    for i in range(len(lines)):
+        if lines[i].startswith(':') and lines[i].endswith(':'):
+            emoji = lines[i]
+            i += 1
+            date = lines[i]
+            i += 1
+            while lines[i] == '':
+                i += 1
+            user = lines[i]
+            i += 1
+            while i < len(lines) and lines[i] == '':
+                i += 1
+            if i < len(lines):
+                assert not lines[i].startswith(':')
+            i += 1
+
+            emoji_name = emoji[1:-1] # strip off colons
+            emojis[emoji_name] = {
+                'date_added': date,
+                'added_by': user
+            }
+    return emojis
+
+
 def get_messages_table():
     all_channels = get_channels()
     all_messages = []
@@ -128,7 +164,29 @@ def get_emoji_timestamps_table():
     return df
 
 
+def get_emojis_table():
+    emoji_data = get_emoji_upload_data()
+
+    emojis = []
+    for name, data in emoji_data.items():
+        data['name'] = name
+        emojis.append(data)
+    emojis_df = pd.DataFrame(emojis)[['name', 'date_added', 'added_by']]
+
+    # Compute emoji popularity
+    emoji_timestamps_messages_df = get_emoji_timestamps_messages_table()
+    reactions_df = get_reactions_table()
+    s = emoji_timestamps_messages_df.emoji.value_counts() + reactions_df.emoji.value_counts()
+    sorted_emojis = s.sort_values(ascending=False).keys()
+    emojis_popularity = dict(zip(sorted_emojis, range(1, len(sorted_emojis)+1)))
+
+    emojis_df['popularity'] = emojis_df.name.map(lambda name: emojis_popularity.get(name, -1))
+
+    return emojis_df
+
+
 if __name__ == '__main__':
     emoji_timestamps_df = get_emoji_timestamps_table()
+    emoji_timestamps_df.to_csv('emoji_timestamps.csv', index=False)
     print(emoji_timestamps_df.head())
 
