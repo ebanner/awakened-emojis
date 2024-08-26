@@ -1,6 +1,8 @@
 import pandas as pd
 from tqdm import tqdm
 
+import json
+
 from main import get_channels, get_emoji_files, get_messages, get_emojis_from_message, get_reactions
 
 
@@ -186,7 +188,14 @@ def get_emojis_table():
 
 
 if __name__ == '__main__':
-    emoji_timestamps_df = get_emoji_timestamps_table()
-    emoji_timestamps_df.to_csv('emoji_timestamps.csv', index=False)
-    print(emoji_timestamps_df.head())
+    # emoji_timestamps_df = get_emoji_timestamps_table()
+    # emoji_timestamps_df.to_csv('emoji_timestamps.csv', index=False)
+    # print(emoji_timestamps_df.head())
+
+    emojis_df = get_emojis_table()
+    emojis_json = emojis_df.set_index('name').to_dict(orient='index')
+    json.dump(emojis_json, open('emojis.json', 'w'))
+
+    print(emojis_df.head())
+
 

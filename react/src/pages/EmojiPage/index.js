@@ -74,7 +74,7 @@ class EmojiPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null,
+      metatdata: null,
       emojiName: props.emojiName,
       usage: [],
       channels: [],
@@ -83,8 +83,8 @@ class EmojiPage extends React.Component {
   }
 
   async componentDidMount() {
-    const API_HOSTNAME = 'https://hrciqioroiwbp5urkjrfrfytkm0ztjwo.lambda-url.us-east-1.on.aws'
-    // const API_HOSTNAME = 'http://localhost:5001'
+    // const API_HOSTNAME = 'https://hrciqioroiwbp5urkjrfrfytkm0ztjwo.lambda-url.us-east-1.on.aws'
+    const API_HOSTNAME = 'http://localhost:5001'
 
     // Do a fetch and use a callback to process the response - don't use await
     fetch(`${API_HOSTNAME}/${this.state.emojiName}/usage`)
@@ -95,9 +95,9 @@ class EmojiPage extends React.Component {
       .then(response => response.json())
       .then(data => this.setState({ channels: data.channels, users: data.users }));
 
-    fetch(`${API_HOSTNAME}/${this.state.emojiName}/upload_data`)
+    fetch(`${API_HOSTNAME}/${this.state.emojiName}/data`)
       .then(response => response.json())
-      .then(data => this.setState({ date_added: data.date_added, added_by: data.added_by }));
+      .then(data => this.setState({ date_added: data.date_added, added_by: data.added_by, popularity: data.popularity }));
 
     const response = await fetch(`${API_HOSTNAME}/${this.state.emojiName}/metadata`);
     const metadata = await response.json();
@@ -107,18 +107,19 @@ class EmojiPage extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.emojiName !== prevProps.emojiName) {
-      const metadata = this.state.data[this.props.emojiName];
+      // const metadata = this.state.data[this.props.emojiName];
       this.setState({
         emojiName: this.props.emojiName,
-        metadata: metadata
+        // metadata: metadata
       });
     }
+    // console.log('updated!', prevProps, this.props);
   }
 
   render() {
-    if (!this.state.metadata) {
-      return null;
-    }
+    // if (!this.state.metadata) {
+    //   return null;
+    // }
 
     const {
       emojiName,
@@ -128,11 +129,12 @@ class EmojiPage extends React.Component {
       users,
       date_added,
       added_by,
+      popularity,
     } = this.state;
 
-    console.log('date_added', date_added);
+    // console.log('date_added', date_added);
 
-    console.log('metadata', metadata);
+    // console.log('metadata', metadata);
 
     const labels = usage.map(use => use.date);
     const dataPoints = usage.map(use => use.count);
@@ -145,7 +147,7 @@ class EmojiPage extends React.Component {
           <div class="name mt-4">
             <h1><pre>:{emojiName}:</pre></h1>
           </div>
-          <div class="emoji mt-4 pt-2">
+          {metadata && <div class="emoji mt-4 pt-2">
             {metadata.type == 'custom' ?
               <img
                 src={metadata.url}
@@ -158,26 +160,26 @@ class EmojiPage extends React.Component {
               >{metadata.emoji}
               </p>
             }
-          </div>
+          </div>}
           <div class="mt-5">
             <div class="row g-5">
               <div class="col-lg-6">
-                <div class="history">
+                {metadata && <div class="history">
                   <h2>History</h2>
                   <ul>
                     {(metadata.type == 'custom') ?
                       <>
                         {added_by && date_added && <li><code>{emojiName}</code> was uploaded by <b>{added_by}</b> on {date_added}.</li>}
-                        <li>It is the <b>{metadata.popularity}</b> most popular emoji.</li>
+                        <li>It is the <b>{popularity}</b> most popular emoji.</li>
                       </>
                       :
                       <li><code>{emojiName}</code> is the <b>{metadata.popularity}</b> most popular emoji.</li>}
                   </ul>
-                </div>
-                <div class="related mt-4 pt-2">
+                </div>}
+                {metadata && <div class="related mt-4 pt-2">
                   <h2>Related Emojis</h2>
                   <EmojiImages emojiList={metadata.related} />
-                </div>
+                </div>}
                 {usage.length > 0 &&
                   <div class="usage col-lg-12 mt-4 pt-2 d-sm-block d-md-none">
                     <h2>Usage</h2>
