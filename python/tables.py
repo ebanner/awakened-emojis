@@ -167,24 +167,21 @@ def get_emoji_timestamps_table():
 
 
 def get_emojis_table():
-    emoji_data = get_emoji_upload_data()
+    """Need to run slackEmojis.js first in a web browser and paste in
+    emojis.json"""
+    emojis = json.load(open('emojis.json'))
+    df = pd.DataFrame(emojis)[['name', 'date_added', 'added_by', 'url']]
+    return df
 
-    emojis = []
-    for name, data in emoji_data.items():
-        data['name'] = name
-        emojis.append(data)
-    emojis_df = pd.DataFrame(emojis)[['name', 'date_added', 'added_by']]
 
-    # Compute emoji popularity
+def get_popularity():
+    emojis_df = get_emojis_table()
     emoji_timestamps_messages_df = get_emoji_timestamps_messages_table()
     reactions_df = get_reactions_table()
     s = emoji_timestamps_messages_df.emoji.value_counts() + reactions_df.emoji.value_counts()
     sorted_emojis = s.sort_values(ascending=False).keys()
-    emojis_popularity = dict(zip(sorted_emojis, range(1, len(sorted_emojis)+1)))
-
-    emojis_df['popularity'] = emojis_df.name.map(lambda name: emojis_popularity.get(name, -1))
-
-    return emojis_df
+    popularity = dict(zip(sorted_emojis, range(1, len(sorted_emojis)+1)))
+    return popularity
 
 
 if __name__ == '__main__':
