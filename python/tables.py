@@ -166,12 +166,32 @@ def get_emoji_timestamps_table():
     return df
 
 
-def get_emojis_table():
+def get_custom_emoji_table():
     """Need to run slackEmojis.js first in a web browser and paste in
     emojis.json"""
     emojis = json.load(open('emojis.json'))
     df = pd.DataFrame(emojis)[['name', 'date_added', 'added_by', 'url']]
     return df
+
+
+def get_slack_emoji_table():
+    """Need to download slack emoji.json from this repo:
+
+    https://github.com/iamcal/emoji-data/blob/master/emoji.json
+
+    first"""
+    def get_emoji(code_point):
+        code_points = code_point.split('-')
+        emoji = ''.join(chr(int(cp, 16)) for cp in code_points)
+        return emoji
+
+    emojis = json.load(open('emoji.json'))
+    for emoji in emojis:
+        code_point = emoji['unified']
+        emoji['emoji'] = get_emoji(code_point)
+
+    slack_emoji_df = pd.DataFrame({'name': emoji['short_name'], 'emoji': emoji['emoji']} for emoji in emojis)
+    return slack_emoji_df
 
 
 def get_popularity():
