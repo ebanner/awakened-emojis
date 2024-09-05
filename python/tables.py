@@ -194,14 +194,31 @@ def get_slack_emoji_table():
     return slack_emoji_df
 
 
-def get_popularity():
-    emojis_df = get_emojis_table()
-    emoji_timestamps_messages_df = get_emoji_timestamps_messages_table()
-    reactions_df = get_reactions_table()
-    s = emoji_timestamps_messages_df.emoji.value_counts() + reactions_df.emoji.value_counts()
-    sorted_emojis = s.sort_values(ascending=False).keys()
-    popularity = dict(zip(sorted_emojis, range(1, len(sorted_emojis)+1)))
-    return popularity
+def get_emojis_table():
+    from tables import get_slack_emoji_table, get_custom_emoji_table
+
+    slack_emoji_df = get_slack_emoji_table()
+    custom_emoji_df = get_custom_emoji_table()
+
+    rows = []
+    for idx, row in slack_emoji_df.iterrows():
+        rows.append({
+            'name': row['name'],
+            'emoji': row['emoji'],
+            'type': 'official',
+            'url': None,
+        })
+
+    for idx, row in custom_emoji_df.iterrows():
+        rows.append({
+            'name': row['name'],
+            'emoji': None,
+            'type': 'custom',
+            'url': row['url']
+        })
+
+    emoji_df = pd.DataFrame(rows)
+    return emoji_df
 
 
 if __name__ == '__main__':
