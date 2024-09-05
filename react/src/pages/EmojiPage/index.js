@@ -95,6 +95,10 @@ class EmojiPage extends React.Component {
       .then(response => response.json())
       .then(data => this.setState({ channels: data.channels, users: data.users }));
 
+    fetch(`${API_HOSTNAME}/${this.state.emojiName}/popularity`)
+      .then(response => response.json())
+      .then(data => this.setState({ popularity: data.popularity }));
+
     fetch(`${API_HOSTNAME}/${this.state.emojiName}/data`)
       .then(response => response.json())
       .then(data => this.setState({ date_added: data.date_added, added_by: data.added_by, popularity: data.popularity }));

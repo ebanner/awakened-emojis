@@ -45,6 +45,17 @@ def get_users_and_channels():
     return metadata
 
 
+def get_popularity():
+    emojis_df = get_emojis_table()
+    emoji_timestamps_messages_df = get_emoji_timestamps_messages_table()
+    reactions_df = get_reactions_table()
+    s = emoji_timestamps_messages_df.emoji.value_counts() + reactions_df.emoji.value_counts()
+    sorted_emojis = s.sort_values(ascending=False).keys()
+    popularity = dict(zip(sorted_emojis, range(1, len(sorted_emojis)+1)))
+    return popularity
+
+
+
 if __name__ == '__main__':
     # users_and_channels = get_users_and_channels()
     # json.dump(users_and_channels, open('users_and_channels.json', 'w'))
@@ -52,6 +63,9 @@ if __name__ == '__main__':
     # emoji_upload_data = get_emoji_upload_data()
     # json.dump(emoji_upload_data, open('emoji_upload_data.json', 'w'))
 
-    related_emojis = get_related_emojis()
-    json.dump(related_emojis, open('related_emojis.json', 'w'))
+    # related_emojis = get_related_emojis()
+    # json.dump(related_emojis, open('related_emojis.json', 'w'))
+
+    emoji_popularity = get_popularity()
+    json.dump(emoji_popularity, open('emoji_popularity.json', 'w'))
 
