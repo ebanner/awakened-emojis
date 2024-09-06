@@ -135,6 +135,16 @@ def get_data(emoji):
     return jsonify(payload)
 
 
+@app.route('/<emoji>/popularity')
+def get_popularity(emoji):
+    result = emoji_popularity[emoji]
+    payload = {
+        'name': emoji,
+        'popularity': result
+    }
+    return jsonify(payload)
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
 
