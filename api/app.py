@@ -128,9 +128,24 @@ def get_users_and_channels(emoji):
     return jsonify(payload)
 
 
-@app.route('/<emoji>/data')
-def get_data(emoji):
-    result = emoji_data[emoji]
+@app.route('/<emoji>/related')
+def get_related(emoji):
+    start = time.time()
+    related = related_emojis[emoji]
+    related = [{**emojis[emoji], 'name': emoji} for emoji in related]
+    end = time.time()
+    print(end-start, 'get_usage_sqlite3')
+
+    payload = {
+        'name': emoji,
+        'related': related,
+    }
+    return jsonify(payload)
+
+
+@app.route('/<emoji>/upload_data')
+def get_upload_data(emoji):
+    result = upload_data[emoji]
     payload = result
     return jsonify(payload)
 
