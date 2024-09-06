@@ -6,7 +6,9 @@ function getUrl(imgCell) {
 
 function getEmojiName(emojiNameCell) {
     emojiName = emojiNameCell.querySelector('b.black').textContent
-    return emojiName
+    emojiName = emojiName.trim() // strip off whitespace
+    emojiName = emojiName.slice(1, -1) // strip off colons
+    return emojiName.trim()
 }
 
 
@@ -60,8 +62,7 @@ function isScrolledToBottom(element) {
 }
 
 
-async function main() {
-    table = $0
+async function main(table) {
     scrollable = table.parentElement.parentElement
 
     var allData = []
@@ -87,5 +88,6 @@ async function main() {
     console.log(json);
 }
 
-main()
+table = $0
+main(table)
 
