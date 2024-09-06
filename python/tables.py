@@ -169,7 +169,7 @@ def get_emoji_timestamps_table():
 def get_custom_emoji_table():
     """Need to run slackEmojis.js first in a web browser and paste in
     emojis.json"""
-    emojis = json.load(open('emojis.json'))
+    emojis = json.load(open('custom_emojis.json'))
     df = pd.DataFrame(emojis)[['name', 'date_added', 'added_by', 'url']]
     return df
 
@@ -194,41 +194,10 @@ def get_slack_emoji_table():
     return slack_emoji_df
 
 
-def get_emojis_table():
-    from tables import get_slack_emoji_table, get_custom_emoji_table
-
-    slack_emoji_df = get_slack_emoji_table()
-    custom_emoji_df = get_custom_emoji_table()
-
-    rows = []
-    for idx, row in slack_emoji_df.iterrows():
-        rows.append({
-            'name': row['name'],
-            'emoji': row['emoji'],
-            'type': 'official',
-            'url': None,
-        })
-
-    for idx, row in custom_emoji_df.iterrows():
-        rows.append({
-            'name': row['name'],
-            'emoji': None,
-            'type': 'custom',
-            'url': row['url']
-        })
-
-    emoji_df = pd.DataFrame(rows)
-    return emoji_df
-
-
 if __name__ == '__main__':
     # emoji_timestamps_df = get_emoji_timestamps_table()
     # emoji_timestamps_df.to_csv('emoji_timestamps.csv', index=False)
     # print(emoji_timestamps_df.head())
-
-    emojis_df = get_emojis_table()
-    emojis_json = emojis_df.set_index('name').to_dict(orient='index')
-    json.dump(emojis_json, open('emojis.json', 'w'))
 
     print(emojis_df.head())
 
