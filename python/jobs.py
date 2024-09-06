@@ -1,6 +1,6 @@
 import pandas as pd
 
-from tables import get_emojis_table, get_emoji_timestamps_table, get_emoji_timestamps_messages_table, get_reactions_table
+from tables import get_emoji_timestamps_table, get_emoji_timestamps_messages_table, get_reactions_table, get_slack_emoji_table, get_custom_emoji_table
 
 from tqdm import tqdm
 
@@ -8,11 +8,14 @@ import json
 
 
 def get_related_emojis():
-    emoji_timestamps_messages_df = get_emoji_timestamps_messages_table()
-    reactions_df = get_reactions_table()
-    emojis_df = get_emojis_table()
+    emojis = get_emojis()
 
-    emojis = emojis_df.name
+    emoji_timestamps_messages_df = get_emoji_timestamps_messages_table()
+    emoji_timestamps_messages_df[emoji_timestamps_messages_df['emoji'].isin(emojis.keys())].reset_index(drop=True)
+
+    reactions_df = get_reactions_table()
+    reactions_df = reactions_df[reactions_df['emoji'].isin(emojis.keys())].reset_index(drop=True)
+
     related = {}
     for emoji in tqdm(emojis, desc='related'):
         # Reactions
@@ -55,6 +58,21 @@ def get_popularity():
     return popularity
 
 
+def get_emojis():
+    slack_emoji_df = get_slack_emoji_table()
+    custom_emoji_table = get_custom_emoji_table()
+
+    emojis = {}
+
+    for idx, record in slack_emoji_df.iterrows():
+        emojis[record['name']] = {'emoji': record['emoji']}
+
+    for idx, row in custom_emoji_table.iterrows():
+        emojis[row['name']] = {'url': row['url']}
+
+    return emojis
+
+
 
 if __name__ == '__main__':
     # users_and_channels = get_users_and_channels()
@@ -63,9 +81,12 @@ if __name__ == '__main__':
     # emoji_upload_data = get_emoji_upload_data()
     # json.dump(emoji_upload_data, open('emoji_upload_data.json', 'w'))
 
-    # related_emojis = get_related_emojis()
-    # json.dump(related_emojis, open('related_emojis.json', 'w'))
+    related_emojis = get_related_emojis()
+    json.dump(related_emojis, open('related_emojis.json', 'w'))
 
-    emoji_popularity = get_popularity()
-    json.dump(emoji_popularity, open('emoji_popularity.json', 'w'))
+    # emoji_popularity = get_popularity()
+    # json.dump(emoji_popularity, open('emoji_popularity.json', 'w'))
+
+    # emojis = get_emojis()
+    # json.dump(emojis, open('emojis.json', 'w'))
 
