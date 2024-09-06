@@ -91,6 +91,10 @@ class EmojiPage extends React.Component {
       .then(response => response.json())
       .then(data => this.setState({ usage: processUsage(data.usage) }));
 
+    fetch(`${API_HOSTNAME}/${this.state.emojiName}/related`)
+      .then(response => response.json())
+      .then(data => this.setState({ related: data.related }));
+
     fetch(`${API_HOSTNAME}/${this.state.emojiName}/users_and_channels`)
       .then(response => response.json())
       .then(data => this.setState({ channels: data.channels, users: data.users }));
@@ -99,9 +103,9 @@ class EmojiPage extends React.Component {
       .then(response => response.json())
       .then(data => this.setState({ popularity: data.popularity }));
 
-    fetch(`${API_HOSTNAME}/${this.state.emojiName}/data`)
+    fetch(`${API_HOSTNAME}/${this.state.emojiName}/upload_data`)
       .then(response => response.json())
-      .then(data => this.setState({ date_added: data.date_added, added_by: data.added_by, popularity: data.popularity }));
+      .then(data => this.setState({ date_added: data.date_added, added_by: data.added_by }));
 
     const response = await fetch(`${API_HOSTNAME}/${this.state.emojiName}/metadata`);
     const metadata = await response.json();
@@ -134,6 +138,7 @@ class EmojiPage extends React.Component {
       date_added,
       added_by,
       popularity,
+      related,
     } = this.state;
 
     // console.log('date_added', date_added);
@@ -177,7 +182,7 @@ class EmojiPage extends React.Component {
                         <li>It is the <b>{popularity}</b> most popular emoji.</li>
                       </>
                       :
-                      <li><code>{emojiName}</code> is the <b>{metadata.popularity}</b> most popular emoji.</li>}
+                      <li><code>{emojiName}</code> is the <b>{popularity}</b> most popular emoji.</li>}
                   </ul>
                 </div>}
                 {metadata && <div class="related mt-4 pt-2">
