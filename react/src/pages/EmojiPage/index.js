@@ -83,8 +83,8 @@ class EmojiPage extends React.Component {
   }
 
   async componentDidMount() {
-    // const API_HOSTNAME = 'https://hrciqioroiwbp5urkjrfrfytkm0ztjwo.lambda-url.us-east-1.on.aws'
-    const API_HOSTNAME = 'http://localhost:5001'
+    const API_HOSTNAME = 'https://hrciqioroiwbp5urkjrfrfytkm0ztjwo.lambda-url.us-east-1.on.aws'
+    // const API_HOSTNAME = 'http://localhost:5001'
 
     // Do a fetch and use a callback to process the response - don't use await
     fetch(`${API_HOSTNAME}/${this.state.emojiName}/usage`)
