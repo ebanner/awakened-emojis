@@ -28,41 +28,6 @@ id_to_user = {
 }
 
 
-def get_emoji_upload_data():
-    """
-
-    Highlight all the emojis on the customize slack page and copy and paste them
-    into a text file called emojis.txt.
-
-    """
-    
-    with open('emojis.txt') as f:
-        lines = [line.strip() for line in f.readlines()]
-
-    emojis = {}
-    for i in range(len(lines)):
-        if lines[i].startswith(':') and lines[i].endswith(':'):
-            emoji = lines[i]
-            i += 1
-            date = lines[i]
-            i += 1
-            while lines[i] == '':
-                i += 1
-            user = lines[i]
-            i += 1
-            while i < len(lines) and lines[i] == '':
-                i += 1
-            if i < len(lines):
-                assert not lines[i].startswith(':')
-            i += 1
-
-            emoji_name = emoji[1:-1] # strip off colons
-            emojis[emoji_name] = {
-                'date_added': date,
-                'added_by': user
-            }
-    return emojis
-
 
 def get_messages_table():
     all_channels = get_channels()

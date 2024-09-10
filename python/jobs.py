@@ -7,6 +7,42 @@ from tqdm import tqdm
 import json
 
 
+def get_emoji_upload_data():
+    """
+
+    Highlight all the emojis on the customize slack page and copy and paste them
+    into a text file called emojis.txt.
+
+    """
+    
+    with open('emojis.txt') as f:
+        lines = [line.strip() for line in f.readlines()]
+
+    emojis = {}
+    for i in range(len(lines)):
+        if lines[i].startswith(':') and lines[i].endswith(':'):
+            emoji = lines[i]
+            i += 1
+            date = lines[i]
+            i += 1
+            while lines[i] == '':
+                i += 1
+            user = lines[i]
+            i += 1
+            while i < len(lines) and lines[i] == '':
+                i += 1
+            if i < len(lines):
+                assert not lines[i].startswith(':')
+            i += 1
+
+            emoji_name = emoji[1:-1] # strip off colons
+            emojis[emoji_name] = {
+                'date_added': date,
+                'added_by': user
+            }
+    return emojis
+
+
 def get_related_emojis():
     emojis = get_emojis()
 
@@ -49,7 +85,6 @@ def get_users_and_channels():
 
 
 def get_popularity():
-    emojis_df = get_emojis_table()
     emoji_timestamps_messages_df = get_emoji_timestamps_messages_table()
     reactions_df = get_reactions_table()
     s = emoji_timestamps_messages_df.emoji.value_counts() + reactions_df.emoji.value_counts()
@@ -81,11 +116,11 @@ if __name__ == '__main__':
     # emoji_upload_data = get_emoji_upload_data()
     # json.dump(emoji_upload_data, open('emoji_upload_data.json', 'w'))
 
-    related_emojis = get_related_emojis()
-    json.dump(related_emojis, open('related_emojis.json', 'w'))
+    # related_emojis = get_related_emojis()
+    # json.dump(related_emojis, open('related_emojis.json', 'w'))
 
-    # emoji_popularity = get_popularity()
-    # json.dump(emoji_popularity, open('emoji_popularity.json', 'w'))
+    emoji_popularity = get_popularity()
+    json.dump(emoji_popularity, open('emoji_popularity.json', 'w'))
 
     # emojis = get_emojis()
     # json.dump(emojis, open('emojis.json', 'w'))
