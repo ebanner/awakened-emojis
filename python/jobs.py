@@ -47,7 +47,7 @@ def get_related_emojis():
     emojis = get_emojis()
 
     emoji_timestamps_messages_df = get_emoji_timestamps_messages_table()
-    emoji_timestamps_messages_df[emoji_timestamps_messages_df['emoji'].isin(emojis.keys())].reset_index(drop=True)
+    emoji_timestamps_messages_df = emoji_timestamps_messages_df[emoji_timestamps_messages_df['emoji'].isin(emojis.keys())].reset_index(drop=True)
 
     reactions_df = get_reactions_table()
     reactions_df = reactions_df[reactions_df['emoji'].isin(emojis.keys())].reset_index(drop=True)
@@ -116,11 +116,11 @@ if __name__ == '__main__':
     # emoji_upload_data = get_emoji_upload_data()
     # json.dump(emoji_upload_data, open('emoji_upload_data.json', 'w'))
 
-    # related_emojis = get_related_emojis()
-    # json.dump(related_emojis, open('related_emojis.json', 'w'))
+    related_emojis = get_related_emojis()
+    json.dump(related_emojis, open('related_emojis.json', 'w'))
 
-    emoji_popularity = get_popularity()
-    json.dump(emoji_popularity, open('emoji_popularity.json', 'w'))
+    # emoji_popularity = get_popularity()
+    # json.dump(emoji_popularity, open('emoji_popularity.json', 'w'))
 
     # emojis = get_emojis()
     # json.dump(emojis, open('emojis.json', 'w'))
