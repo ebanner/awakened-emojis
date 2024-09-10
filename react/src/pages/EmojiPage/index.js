@@ -44,7 +44,7 @@ const EmojiImages = (props) => {
   return (
     emojiList.slice(0, 6).map((emoji) =>
       <Link to={`/emojis/${emoji.name}`}>
-        {emoji.type == "custom" ?
+        {'url' in emoji ?
           <img
             src={emoji.url}
             width="32"
@@ -144,6 +144,8 @@ class EmojiPage extends React.Component {
 
     const labels = usage.map(use => use.date);
     const dataPoints = usage.map(use => use.count);
+
+    console.log('basicInfo', basicInfo);
 
     return (
       // emoji object as a <pre> element
