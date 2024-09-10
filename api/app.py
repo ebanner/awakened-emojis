@@ -166,6 +166,16 @@ def get_popularity(emoji):
     return jsonify(payload)
 
 
+@app.route('/<emoji>/basic_info')
+def get_basic_info(emoji):
+    emoji_info = EMOJIS[emoji]
+    payload = {
+        'name': emoji,
+        **emoji_info
+    }
+    return jsonify(payload)
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
 

@@ -83,8 +83,8 @@ class EmojiPage extends React.Component {
   }
 
   async componentDidMount() {
-    const API_HOSTNAME = 'https://hrciqioroiwbp5urkjrfrfytkm0ztjwo.lambda-url.us-east-1.on.aws'
-    // const API_HOSTNAME = 'http://localhost:5001'
+    // const API_HOSTNAME = 'https://hrciqioroiwbp5urkjrfrfytkm0ztjwo.lambda-url.us-east-1.on.aws'
+    const API_HOSTNAME = 'http://localhost:5001'
 
     // Do a fetch and use a callback to process the response - don't use await
     fetch(`${API_HOSTNAME}/${this.state.emojiName}/usage`)
@@ -107,31 +107,23 @@ class EmojiPage extends React.Component {
       .then(response => response.json())
       .then(data => this.setState({ date_added: data.date_added, added_by: data.added_by }));
 
-    const response = await fetch(`${API_HOSTNAME}/${this.state.emojiName}/metadata`);
-    const metadata = await response.json();
-
-    this.setState({ metadata: metadata });
+    fetch(`${API_HOSTNAME}/${this.state.emojiName}/basic_info`)
+      .then(response => response.json())
+      .then(data => this.setState({ basicInfo: data }));
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.emojiName !== prevProps.emojiName) {
-      // const metadata = this.state.data[this.props.emojiName];
       this.setState({
         emojiName: this.props.emojiName,
-        // metadata: metadata
       });
     }
     // console.log('updated!', prevProps, this.props);
   }
 
   render() {
-    // if (!this.state.metadata) {
-    //   return null;
-    // }
-
     const {
       emojiName,
-      metadata,
       usage,
       channels,
       users,
@@ -139,11 +131,16 @@ class EmojiPage extends React.Component {
       added_by,
       popularity,
       related,
+      basicInfo,
     } = this.state;
 
-    // console.log('date_added', date_added);
+    console.log('usage', usage);
 
-    // console.log('metadata', metadata);
+    console.log('popularity', popularity);
+
+    console.log('related', related);
+
+    // console.log('date_added', date_added);
 
     const labels = usage.map(use => use.date);
     const dataPoints = usage.map(use => use.count);
@@ -156,27 +153,27 @@ class EmojiPage extends React.Component {
           <div class="name mt-4">
             <h1><pre>:{emojiName}:</pre></h1>
           </div>
-          {metadata && <div class="emoji mt-4 pt-2">
-            {metadata.type == 'custom' ?
+          {basicInfo && <div class="emoji mt-4 pt-2">
+            {'url' in basicInfo ?
               <img
-                src={metadata.url}
+                src={basicInfo.url}
                 alt={emojiName}
                 width="64"
               />
               :
               <p
                 style={{ fontSize: "48px" }}
-              >{metadata.emoji}
+              >{basicInfo.emoji}
               </p>
             }
           </div>}
           <div class="mt-5">
             <div class="row g-5">
               <div class="col-lg-6">
-                {metadata && <div class="history">
+                {basicInfo && <div class="history">
                   <h2>History</h2>
                   <ul>
-                    {(metadata.type == 'custom') ?
+                    {(added_by && popularity && date_added) ?
                       <>
                         {added_by && date_added && <li><code>{emojiName}</code> was uploaded by <b>{added_by}</b> on {date_added}.</li>}
                         <li>It is the <b>{popularity}</b> most popular emoji.</li>
@@ -185,9 +182,9 @@ class EmojiPage extends React.Component {
                       <li><code>{emojiName}</code> is the <b>{popularity}</b> most popular emoji.</li>}
                   </ul>
                 </div>}
-                {metadata && <div class="related mt-4 pt-2">
+                {related && <div class="related mt-4 pt-2">
                   <h2>Related Emojis</h2>
-                  <EmojiImages emojiList={metadata.related} />
+                  <EmojiImages emojiList={related} />
                 </div>}
                 {usage.length > 0 &&
                   <div class="usage col-lg-12 mt-4 pt-2 d-sm-block d-md-none">
