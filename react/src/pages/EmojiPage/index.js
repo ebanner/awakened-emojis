@@ -188,14 +188,16 @@ class EmojiPage extends React.Component {
                   <h2>Related Emojis</h2>
                   <EmojiImages emojiList={related} />
                 </div>}
-                {usage.length > 0 &&
-                  <div class="usage col-lg-12 mt-4 pt-2 d-sm-block d-md-none">
-                    <h2>Usage</h2>
+                <div class="usage col-lg-12 mt-4 pt-2 d-sm-block d-md-none">
+                  <h2>Usage</h2>
+                  {usage.length > 0 ?
                     <div style={{ width: '100%' }}>
                       <LineChart emojiName={emojiName} labels={labels} dataPoints={dataPoints} />
                     </div>
-                  </div>
-                }
+                    :
+                    <p>Loading...</p>
+                  }
+                </div>
                 <div class="box" style={{ "display": "flex", gap: "100px" }}>
                   <div class="users mt-4 pt-4" style={{ gap: "100px" }}>
                     <h2>Users</h2>
@@ -237,19 +239,17 @@ class EmojiPage extends React.Component {
                   </div>
                 </div>
               </div>
-              {usage.length > 0 &&
-                <div class="usage col-lg-6 d-none d-md-block">
-                  <h2>Usage</h2>
+              <div class="usage col-lg-6 d-none d-md-block">
+                <h2>Usage</h2>
+                {usage.length > 0 ?
                   <div style={{ width: '100%' }}>
                     <LineChart emojiName={emojiName} labels={labels} dataPoints={dataPoints} />
                   </div>
-                </div>
-              }
+                  :
+                  <p>Loading...</p>
+                }
+              </div>
             </div>
-          </div>
-          <div class="column">
-
-
           </div>
         </div>
       </div>
