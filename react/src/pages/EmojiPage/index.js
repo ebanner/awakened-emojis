@@ -48,12 +48,13 @@ const EmojiImages = (props) => {
           <img
             src={emoji.url}
             width="32"
+            title={emoji.name}
           />
           :
           emoji.emoji != null ?
-            <span style={{ fontSize: "32px" }}>{emoji.emoji}</span>
+            <span style={{ fontSize: "32px" }} title={emoji.name}>{emoji.emoji}</span>
             :
-            <span style={{ fontSize: "16px" }}>{emoji.name}</span>}
+            <span style={{ fontSize: "16px" }} title={emoji.name}>{emoji.name}</span>}
       </Link>
     ));
 };
