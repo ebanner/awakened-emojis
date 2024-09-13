@@ -1,4 +1,4 @@
-import React, { Component, useRef } from 'react';
+import React, { Component, useRef, useState } from 'react';
 
 import './index.css';
 
@@ -39,24 +39,39 @@ const LineChart = ({ emojiName, labels, dataPoints }) => {
 
 
 const EmojiImages = (props) => {
+  const [numEmojisToShow, setNumEmojisToShow] = React.useState(6);
   const { emojiList } = props;
 
+  const handleClick = () => {
+    setNumEmojisToShow(numEmojisToShow * 2);
+  }
+
   return (
-    emojiList.slice(0, 6).map((emoji) =>
-      <Link to={`/emojis/${emoji.name}`}>
-        {'url' in emoji ?
-          <img
-            src={emoji.url}
-            width="32"
-            title={emoji.name}
-          />
-          :
-          emoji.emoji != null ?
-            <span style={{ fontSize: "32px" }} title={emoji.name}>{emoji.emoji}</span>
-            :
-            <span style={{ fontSize: "16px" }} title={emoji.name}>{emoji.name}</span>}
-      </Link>
-    ));
+    <>
+      {
+        emojiList.slice(0, numEmojisToShow).map((emoji) =>
+          <Link to={`/emojis/${emoji.name}`}>
+            {'url' in emoji ?
+              <img
+                src={emoji.url}
+                width="32"
+                title={emoji.name}
+              />
+              :
+              emoji.emoji != null ?
+                <span style={{ fontSize: "32px" }} title={emoji.name}>{emoji.emoji}</span>
+                :
+                <span style={{ fontSize: "16px" }} title={emoji.name}>{emoji.name}</span>}
+          </Link>
+        )
+      }
+      {numEmojisToShow <= emojiList.length &&
+        <span style={{ paddingLeft: "10px" }}>
+          <button onClick={handleClick}>...</button>
+        </span>
+      }
+    </>
+  )
 };
 
 
