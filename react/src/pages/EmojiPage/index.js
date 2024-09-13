@@ -39,8 +39,9 @@ const LineChart = ({ emojiName, labels, dataPoints }) => {
 
 
 const EmojiImages = (props) => {
-  const [numEmojisToShow, setNumEmojisToShow] = React.useState(6);
   const { emojiList } = props;
+
+  const [numEmojisToShow, setNumEmojisToShow] = React.useState(6);
 
   const handleClick = () => {
     setNumEmojisToShow(numEmojisToShow * 2);
@@ -95,43 +96,53 @@ class EmojiPage extends React.Component {
       usage: [],
       channels: [],
       users: [],
+      numEmojisToShow: 6,
     };
   }
 
-  async componentDidMount() {
+  fetchData() {
+    const emoji = this.state.emojiName;
+
     const API_HOSTNAME = 'https://hrciqioroiwbp5urkjrfrfytkm0ztjwo.lambda-url.us-east-1.on.aws'
     // const API_HOSTNAME = 'http://localhost:5001'
 
     // Do a fetch and use a callback to process the response - don't use await
-    fetch(`${API_HOSTNAME}/${this.state.emojiName}/usage`)
+    fetch(`${API_HOSTNAME}/${emoji}/usage`)
       .then(response => response.json())
       .then(data => this.setState({ usage: processUsage(data.usage) }));
 
-    fetch(`${API_HOSTNAME}/${this.state.emojiName}/related`)
+    fetch(`${API_HOSTNAME}/${emoji}/related`)
       .then(response => response.json())
       .then(data => this.setState({ related: data.related }));
 
-    fetch(`${API_HOSTNAME}/${this.state.emojiName}/users_and_channels`)
+    fetch(`${API_HOSTNAME}/${emoji}/users_and_channels`)
       .then(response => response.json())
       .then(data => this.setState({ channels: data.channels, users: data.users }));
 
-    fetch(`${API_HOSTNAME}/${this.state.emojiName}/popularity`)
+    fetch(`${API_HOSTNAME}/${emoji}/popularity`)
       .then(response => response.json())
       .then(data => this.setState({ popularity: data.popularity }));
 
-    fetch(`${API_HOSTNAME}/${this.state.emojiName}/upload_data`)
+    fetch(`${API_HOSTNAME}/${emoji}/upload_data`)
       .then(response => response.json())
       .then(data => this.setState({ date_added: data.date_added, added_by: data.added_by }));
 
-    fetch(`${API_HOSTNAME}/${this.state.emojiName}/basic_info`)
+    fetch(`${API_HOSTNAME}/${emoji}/basic_info`)
       .then(response => response.json())
       .then(data => this.setState({ basicInfo: data }));
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  async componentDidUpdate(prevProps) {
     if (this.props.emojiName !== prevProps.emojiName) {
       this.setState({
         emojiName: this.props.emojiName,
+        numEmojisToShow: 6,
+      }, () => {
+        this.fetchData();
       });
     }
     // console.log('updated!', prevProps, this.props);
@@ -148,6 +159,7 @@ class EmojiPage extends React.Component {
       popularity,
       related,
       basicInfo,
+      numEmojisToShow,
     } = this.state;
 
     console.log('usage', usage);
@@ -202,7 +214,7 @@ class EmojiPage extends React.Component {
                 </div>}
                 {related && <div class="related mt-4 pt-2">
                   <h2>Related Emojis</h2>
-                  <EmojiImages emojiList={related} />
+                  <EmojiImages emojiList={related} key={emojiName} />
                 </div>}
                 <div class="usage col-lg-12 mt-4 pt-2 d-sm-block d-md-none">
                   <h2>Usage</h2>
