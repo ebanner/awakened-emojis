@@ -226,8 +226,8 @@ class EmojiPage extends React.Component {
                     <p>Loading...</p>
                   }
                 </div>
-                <div class="box" style={{ "display": "flex", gap: "100px" }}>
-                  <div class="users mt-4 pt-4" style={{ gap: "100px" }}>
+                <div class="box mt-4 pt-4 ms-2 me-2 mb-4" style={{ "display": "flex", "justify-content": "space-between", gap: "50px" }}>
+                  <div class="users">
                     <h2>Users</h2>
                     <table>
                       <thead>
@@ -246,7 +246,7 @@ class EmojiPage extends React.Component {
                       </tbody>
                     </table>
                   </div>
-                  <div class="channels mt-4 pt-4">
+                  <div class="channels">
                     <h2>Channels</h2>
                     <table>
                       <thead>
