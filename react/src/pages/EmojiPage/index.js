@@ -240,7 +240,7 @@ class EmojiPage extends React.Component {
                         {users && users.map((user, index) => (
                           <tr key={index}>
                             <td>{user.name}</td>
-                            <td>{user.count}</td>
+                            <td class="text-end">{user.count}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -259,7 +259,7 @@ class EmojiPage extends React.Component {
                         {channels && channels.map((channel, index) => (
                           <tr key={index}>
                             <td>{channel.name}</td>
-                            <td>{channel.count}</td>
+                            <td class="text-end">{channel.count}</td>
                           </tr>
                         ))}
                       </tbody>
