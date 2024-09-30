@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import EmojiPickerPage from './pages/EmojiPicker/index.js';
 import EmojiPageWrapper from './pages/EmojiPage/index.js'
 import UsersPage from './pages/UsersPage/index.js'
+import UserPage from './pages/UserPage/index.js'
 
 import './index.css';
 
@@ -49,6 +50,7 @@ const App = () => {
         <Route path="/" element={<EmojiPickerPage />} />
         <Route path="/emojis/:emojiName" element={<EmojiPageWrapper />} />
         <Route path="/users" element={<UsersPage />} />
+        <Route path="/users/:user" element={<UserPage />} />
       </Routes>
     </Router>
   );

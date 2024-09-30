@@ -1,0 +1,42 @@
+/* EmojiPage.module.css */
+.emojiPage {
+    /* background-color: lightblue; */
+}
+
+/* Make emoji-and-name be inline */
+/* .emoji-and-name {
+  background-color: lightblue;
+} */
+
+  /* Put some padding between the title-bar
+and the page-body */
+.emoji-page-body {
+  /* background-color: lightblue; */
+  /* padding-top: 20px; */
+  /* border: 5px solid black; */
+  /* set the margin to 20px orange */
+  /* margin: 10px; */
+  /* 10x left margin */
+  margin-left: 16px;
+  margin-right: 16px;
+  /* make the margin orange */
+  /* padding 20px */
+  /* padding: 10px; */
+  /* set the border width to 20px */
+  /* border-width: 20px; */
+  /* border: 20px; */
+}
+
+/* Add some margin above and below emoji-header class */
+.emoji-header {
+  margin: 16px 0;
+}
+
+.main-emoji {
+  /* Give me 30px margin above and 20px margin below */
+  margin: 32px 0 32px;
+}
+
+.channels-section {
+  margin: 40px 0;
+}
