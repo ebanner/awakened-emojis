@@ -42,7 +42,7 @@ and the page-body */
 
 .grid-container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(5, 35px);
   grid-gap: 10px;
   max-width: 200px;
   margin: 0 auto; /* center the container horizontally */
