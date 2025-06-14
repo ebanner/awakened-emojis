@@ -5,7 +5,7 @@ import TitleBar from '../../components/index.js';
 
 import './index.css'
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 import emojiRegex from 'emoji-regex';
 
