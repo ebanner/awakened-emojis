@@ -115,7 +115,7 @@ class Grid extends React.Component {
       return (
         <>
           <TitleBar />
-          <div class="page-body">
+          <div class="page-body p-8">
             {/* <A1 /> */}
             {/* <A2 /> */}
             <Grid
@@ -124,8 +124,11 @@ class Grid extends React.Component {
               onMouseMove={this.onMouseMove}
               percentageOfEmojisToShow={this.state.percentageOfEmojisToShow}
             />
-            <div class="button-container">
-              <button onClick={this.handleButtonClick}>More</button>
+            <div class="mt-6 flex justify-center">
+              <button 
+                onClick={this.handleButtonClick}
+                class="bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 active:scale-95 duration-200 ease-in-out px-5 py-2.5"
+              >More</button>
             </div>
           </div>
           {this.state.emojiName &&

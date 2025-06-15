@@ -11,26 +11,6 @@ body {
   margin: 0;
 }
 
-button {
-  /* padding: 10px 20px; */
-  border: none;
-  background-color: #007bff;
-  color: white;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.button-container {
-  /* Right align the button */
-  text-align: center;
-  
-  /* Put some space between the emojis and the button */
-  padding-top: 20px;
-}
-
 /* Style the title-bar class to be grey
 and horizontal across the top of the page */
 .title-bar {
@@ -39,21 +19,6 @@ and horizontal across the top of the page */
   padding: 12px;
   /* font-family: sans-serif; */
   /* border: 0px 0px 0px 0px; */
-}
-
-/* Put some padding between the title-bar
-and the page-body */
-.page-body {
-  /* padding-top: 20px; */
-  /* border: 5px solid black; */
-  /* set the margin to 20px orange */
-  margin: 20px;
-  /* make the margin orange */
-  /* padding 20px */
-  padding: 20px;
-  /* set the border width to 20px */
-  /* border-width: 20px; */
-  /* border: 20px; */
 }
 
 .grid-container {
